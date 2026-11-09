@@ -1,0 +1,36 @@
+
+### Q1  Java  search.md  Federated/Multi-Search > Presets
+# search.md lines 1139-1151 on typesense-website master
+    HashMap<String,String > search1 = new HashMap<>();
+    
+    search1.put("preset","listing_view");
+    
+    List<HashMap<String, String>> searches = new ArrayList<>();
+    searches.add(search1);
+    
+    HashMap<String, List<HashMap<String ,String>>> searchRequests = new HashMap<>();
+    searchRequests.put("searches",searches);
+    
+    HashMap<String,String> commonSearchParams = new HashMap<>();
+    
+    client.multiSearch.perform(searchRequests, commonSearchParams);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+[ERROR] /w/src/main/java/Main.java:[20,28] incompatible types: java.util.HashMap<java.lang.String,java.util.List<java.util.HashMap<java.lang.String,java.lang.String>>> cannot be converted to org.typesense.model.MultiSearchSearchesParameter
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project scratch: Compilation failure
+
+### Q2  Go  search.md  Federated/Multi-Search > Presets
+# search.md lines 1158-1168 on typesense-website master
+    searchRequests := api.MultiSearchSearchesParameter{
+      Searches: []api.MultiSearchCollectionParameters{
+        {
+          Preset: "listing_view"
+        },
+      },
+    }
+    
+    commonSearchParams := &api.MultiSearchParams{}
+    
+    client.MultiSearch.Perform(context.Background(), commonSearchParams, searchRequests)
+$ cd "/c/tmp/docs302-verify/evidence/search/go" && go build -o /dev/null . 2>&1 && go run . 2>&1
+# scratch
+.\main.go:21:30: syntax error: unexpected newline in composite literal; possibly missing comma or }

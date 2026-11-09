@@ -1,0 +1,30 @@
+
+### Q1  Java  search.md  Federated/Multi-Search > Presets
+# search.md lines 1139-1147 on this PR
+    MultiSearchCollectionParameters search1 = new MultiSearchCollectionParameters();
+    search1.setPreset("listing_view");
+    
+    MultiSearchSearchesParameter searchRequests = new MultiSearchSearchesParameter()
+            .addSearchesItem(search1);
+    
+    HashMap<String,String> commonSearchParams = new HashMap<>();
+    
+    MultiSearchResult result = client.multiSearch.perform(searchRequests, commonSearchParams);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+multi_search Java tab ran
+
+### Q2  Go  search.md  Federated/Multi-Search > Presets
+# search.md lines 1154-1164 on this PR
+    searchRequests := api.MultiSearchSearchesParameter{
+      Searches: []api.MultiSearchCollectionParameters{
+        {
+          Preset: pointer.String("listing_view"),
+        },
+      },
+    }
+    
+    commonSearchParams := &api.MultiSearchParams{}
+    
+    client.MultiSearch.Perform(context.Background(), commonSearchParams, searchRequests)
+$ cd "/c/tmp/docs302-verify/evidence/search/go" && go build -o /dev/null . 2>&1 && go run . 2>&1
+multi_search Go tab ran
