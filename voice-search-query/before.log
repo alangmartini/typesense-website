@@ -1,0 +1,24 @@
+
+### VQ1  Shell  voice-search-query.md  Multi search using voice query (voice_query body)
+# voice-search-query.md lines 62-63 on typesense-website master
+    VOICE_QUERY=$(sox -d -r 16000 -b 16 -c 1 -e signed-integer output.wav trim 0 5 && cat output.wav | base64)
+    
+# voice-search-query.md lines 67-77 on typesense-website master
+          --data-binary '
+              {
+                "searches": [
+                  {
+                    "collection": "products",
+                    "query_by": "name",
+                    "voice_query": "'${VOICE_QUERY}'"
+                  }
+                ]
+              }
+          '
+
+### VQ2  Shell  voice-search-query.md  Multi search using voice query (request URL)
+# voice-search-query.md line 64 on typesense-website master
+    curl 'http://localhost/multi_search' \
+[ruby:3.3] $ export PATH=/w/bin:$PATH TYPESENSE_API_KEY=xyz; timeout 8 bash vq.sh 2>&1 | tr "\r" "\n" | grep -E "^curl:" | sort -u | head -n 5
+curl: (3) URL rejected: Bad hostname
+curl: (7) Failed to connect to localhost port 80 after 0 ms: Could not connect to server

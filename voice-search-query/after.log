@@ -1,0 +1,18 @@
+
+### VQ1  Shell  voice-search-query.md  Multi search using voice query (voice_query body)
+# voice-search-query.md lines 62-67 on this PR
+    sox -d -r 16000 -b 16 -c 1 -e signed-integer output.wav trim 0 5
+    
+    # The base64 audio is too long to pass as a curl argument, so write the request body to a file
+    printf '{"searches": [{"collection": "products", "query_by": "name", "voice_query": "%s"}]}' \
+      "$(base64 < output.wav | tr -d '\n')" > body.json
+    
+# voice-search-query.md line 71 on this PR
+          --data-binary @body.json
+
+### VQ2  Shell  voice-search-query.md  Multi search using voice query (request URL)
+# voice-search-query.md line 68 on this PR
+    curl 'http://localhost:8108/multi_search' \
+[ruby:3.3] $ export PATH=/w/bin:$PATH TYPESENSE_API_KEY=xyz; bash vq.sh >out.log 2>err.log; tr "\r" "\n" <err.log | grep -vE "^\s*$|^\s*[0-9%]|Dload" | tail -n 2; grep -o "\"found\":[0-9]*" out.log; grep -o "\"transcribed_query\":\"[^\"]*\"" out.log
+"found":0
+"transcribed_query":"♪♪"
