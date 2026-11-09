@@ -1,0 +1,140 @@
+
+### D3  Java  documents.md  Upsert a document
+# documents.md lines 261-268 on this PR
+    HashMap<String, Object> document = new HashMap<>();
+    
+    document.put("id","124");
+    document.put("company_name","Stark Industries");
+    document.put("num_employees",5215);
+    document.put("country","USA");
+    
+    client.collections("companies").documents().upsert(document);
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D3.java && java -cp ".:$(cat cp.txt)" D3
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> upsert id=124
+
+### D1  PHP  documents.md  Index multiple documents
+# documents.md line 670 on this PR
+    $client->collections['companies']->documents->import($documentsInJsonl, ['batch_size' => 100]);
+[php:8.4-cli] $ php d1.php
+-> imported
+
+### D2  Ruby  documents.md  Index multiple documents
+# documents.md line 686 on this PR
+    client.collections['companies'].documents.import(documents_jsonl, batch_size: 100)
+[ruby:3.3] $ BUNDLE_PATH=.bundle bundle exec ruby d2.rb
+-> imported
+
+### D4  Java  documents.md  Import documents from a JSONL file
+# documents.md lines 701-711 on this PR
+    File myObj = new File("documents.jsonl");
+    Scanner myReader = new Scanner(myObj);
+    StringBuilder documentsInJsonl = new StringBuilder();
+    while (myReader.hasNextLine()) {
+        documentsInJsonl.append(myReader.nextLine()).append("\n");
+    }
+    
+    ImportDocumentsParameters queryParameters = new ImportDocumentsParameters();
+    queryParameters.batchSize(100);
+    
+    client.collections("companies").documents().import_(documentsInJsonl.toString(), queryParameters);
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D4.java && java -cp ".:$(cat cp.txt)" D4
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> import ok
+
+### D9  Dart  documents.md  Dealing with dirty data (dirty_values)
+# documents.md lines 814-816 on this PR
+    final document = {'title': 1984, 'points': 100};
+    
+    await client.collection('titles').documents.create(document, options: {'dirty_values': 'coerce_or_reject'});
+[dart:stable] $ dart run d9.dart
+-> created (dirty_values coerced)
+
+### D5  Java  documents.md  Retrieve a document
+# documents.md line 1121 on this PR
+    Map<String, Object> document = client.collections("companies").documents("124").retrieve();
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D5.java && java -cp ".:$(cat cp.txt)" D5
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> retrieve {company_name=Stark Industries, country=USA, id=124, num_employees=5215}
+
+### D6  Java  documents.md  Update a document
+# documents.md lines 1253-1257 on this PR
+    HashMap<String, Object> document = new HashMap<>();
+    document.put("company_name","Stark Industries");
+    document.put("num_employees",5500);
+    
+    Map<String, Object> updatedDocument = client.collections("companies").documents("124").update(document);
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D6a.java && java -cp ".:$(cat cp.txt)" D6a
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> update {company_name=Stark Industries, country=USA, id=124, num_employees=5500}
+
+### D11  Dart  documents.md  Update documents matching a filter (update by query)
+# documents.md lines 1382-1387 on this PR
+    final document = {
+      'tag': 'large'
+    };
+    
+    // typesense-dart 0.6.0 has no update-by-query method: documents.update() sends a
+    // single-document POST with action=update. Use the Shell example instead.
+[dart:stable] $ dart run d11.dart
+-> compiled; see note above for why no call was made
+
+### D7  Java  documents.md  Update documents by filter (update by query)
+# documents.md lines 1394-1399 on this PR
+    HashMap<String, Object> document = new HashMap<>();
+    document.put("tag","large");
+    UpdateDocumentsParameters updateDocumentsParameters = new UpdateDocumentsParameters();
+    updateDocumentsParameters.filterBy("num_employees:>1000");
+    
+    Map<String, Integer> result = client.collections("companies").documents().update(document, updateDocumentsParameters);
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D7.java && java -cp ".:$(cat cp.txt)" D7
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> update-by-query done
+
+### D6  Java  documents.md  Delete a document
+# documents.md line 1495 on this PR
+    Map<String, Object> deletedDocument = client.collections("companies").documents("124").delete();
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D6b.java && java -cp ".:$(cat cp.txt)" D6b
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> delete {company_name=Stark Industries, country=USA, id=124, num_employees=5500, tag=large}
+
+### D13  Python  documents.md  Delete all documents (truncate)
+# documents.md line 1679 on this PR
+    client.collections['companies'].documents.delete({'truncate': True})
+$ cd "/c/tmp/docs302-verify/evidence/documents/py" && "/c/tmp/docs302-verify/venv-documents/Scripts/python.exe" d13.py
+-> {'num_deleted': 8}
+
+### D12  Dart  documents.md  Delete all documents (truncate)
+# documents.md line 1693 on this PR
+    await client.collection('companies').documents.delete({'truncate': 'true'});
+[dart:stable] $ dart run d12.dart
+-> {num_deleted: 2}
+
+### D8  Java  documents.md  Delete all documents (truncate)
+# documents.md line 1700 on this PR
+    Map<String, Object> response = client.collections("companies").documents().delete(new DeleteDocumentsParameters().truncate(true));
+[maven:3-eclipse-temurin-17] $ javac -cp "$(cat cp.txt)" D8.java && java -cp ".:$(cat cp.txt)" D8
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+-> truncate {num_deleted=2}
+
+### D14  Swift  documents.md  Delete all documents (truncate)
+# documents.md lines 1707-1708 on this PR
+    // typesense-swift v1.0.1 has no truncate option: DeleteDocumentsParameters only takes
+    // filterBy, batchSize and ignoreNotFound. Use the Shell example instead.
+[swift:5.10] $ swift build > /tmp/sb.log 2>&1; grep -E 'error:|Build complete' /tmp/sb.log | head -n 5; test -x .build/debug/docstest && .build/debug/docstest
+Build complete! (28.01s)
+-> compiled
