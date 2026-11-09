@@ -1,0 +1,75 @@
+
+### F1  Dart  federated-multi-search.md  Federated search across multiple collections
+# federated-multi-search.md lines 129-148 on this PR
+    final searchRequests = {
+      'searches': [
+        {
+          'collection': 'products',
+          'q': 'shoe',
+          'filter_by': 'price:=[50..120]'
+        },
+        {
+          'collection': 'brands',
+          'q': 'Nike'
+        }
+      ]
+    };
+    
+    // Search parameters that are common to all searches go here
+    final commonSearchParams =  {
+        'query_by': 'name',
+    };
+    
+    await client.multiSearch.perform(searchRequests, queryParams: commonSearchParams);
+[dart:stable] $ dart pub get 2>&1 | tail -3; dart run lib/main.dart 2>&1 | grep -E "Error:|ran$" | head -n 4
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+federated search Dart tab ran
+
+### FQ1  Java  federated-multi-search.md  Federated search across multiple collections
+# federated-multi-search.md lines 155-171 on this PR
+    MultiSearchCollectionParameters search1 = new MultiSearchCollectionParameters();
+    search1.setCollection("products");
+    search1.setQ("shoe");
+    search1.setFilterBy("price:=[50..120]");
+    
+    MultiSearchCollectionParameters search2 = new MultiSearchCollectionParameters();
+    search2.setCollection("brands");
+    search2.setQ("Nike");
+    
+    MultiSearchSearchesParameter searchRequests = new MultiSearchSearchesParameter()
+            .addSearchesItem(search1)
+            .addSearchesItem(search2);
+    
+    HashMap<String,String> commonSearchParams = new HashMap<>();
+    commonSearchParams.put("query_by","name");
+    
+    MultiSearchResult result = client.multiSearch.perform(searchRequests, commonSearchParams);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+federated search Java tab ran
+
+### F2  Go  federated-multi-search.md  Federated search across multiple collections
+# federated-multi-search.md lines 178-197 on this PR
+    searchRequests := api.MultiSearchSearchesParameter{
+      Searches: []api.MultiSearchCollectionParameters{
+        {
+          Collection: pointer.String("products"),
+          Q:          pointer.String("shoe"),
+          FilterBy:   pointer.String("price:=[50..120]"),
+        },
+        {
+          Collection: pointer.String("brands"),
+          Q:          pointer.String("Nike"),
+        },
+      },
+    }
+    
+    // Search parameters that are common to all searches go here
+    commonSearchParams := &api.MultiSearchParams{
+      QueryBy: pointer.String("name"),
+    }
+    
+    client.MultiSearch.Perform(context.Background(), commonSearchParams, searchRequests)
+$ cd "/c/tmp/docs302-verify/evidence/federated-multi-search/go" && go build -o /dev/null . 2>&1 && go run . 2>&1
+federated search Go tab ran
