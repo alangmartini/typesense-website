@@ -1,0 +1,88 @@
+
+### GK1  Java  geosearch.md  Create a places collection
+# geosearch.md lines 143-151 on this PR
+    CollectionSchema collectionSchema = new CollectionSchema();
+    
+    collectionSchema.name("places")
+                    .addFieldsItem(new Field().name("title").type("string"))
+                    .addFieldsItem(new Field().name("points").type("int32"))
+                    .addFieldsItem(new Field().name("location").type("geopoint"))
+                    .defaultSortingField("points");
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+create collection Java tab ran
+
+### G2  Shell  geosearch.md  Create a places collection
+# geosearch.md lines 184-194 on this PR
+    curl -k "http://localhost:8108/collections" -X POST \
+          -H "Content-Type: application/json" \
+          -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+            "name": "places",
+            "fields": [
+              {"name": "title", "type": "string" },
+              {"name": "points", "type": "int32" },
+              {"name": "location", "type": "geopoint"}
+            ],
+            "default_sorting_field": "points"
+          }'
+$ HOME="/c/tmp/docs302-verify/evidence/geosearch" TYPESENSE_API_KEY=xyz sh "/c/tmp/docs302-verify/evidence/geosearch/g2.sh" 2>&1 | grep -oE '"message": ?"[^"]*"|"name":"places"|"num_documents":[0-9]*'
+"name":"places"
+"num_documents":0
+
+### G3  Dart  geosearch.md  Index a geopoint document
+# geosearch.md lines 261-267 on this PR
+    final document = {
+      'title': 'Louvre Museuem',
+      'points': 1,
+      'location': [48.86093481609114, 2.33698396872901]
+    };
+    
+    await client.collection('places').documents.create(document);
+[dart:stable] $ dart pub get 2>&1 | tail -3; dart run lib/main.dart 2>&1 | grep -E "Error:|ran$" | head -n 4
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+index Dart tab ran
+
+### GV3  Java  geosearch.md  Index a geopoint document
+# geosearch.md lines 275-282 on this PR
+    Map<String, Object> document = new HashMap<>();
+    double[] location = {48.86093481609114, 2.33698396872901};
+    
+    document.put("title", "Louvre Museuem");
+    document.put("points", 1);
+    document.put("location", location);
+    
+    client.collections("places").documents().create(document);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+index Java tab ran
+
+### G4  Python  geosearch.md  Radius search
+# geosearch.md lines 363-370 on this PR
+    search_parameters = {
+      'q'         : '*',
+      'query_by'  : 'title',
+      'filter_by' : 'location:(48.90615915923891, 2.3435897727061175, 5.1 km)',
+      'sort_by'   : 'location(48.853, 2.344):asc'
+    }
+    
+    client.collections['places'].documents.search(search_parameters)
+$ "/c/tmp/docs302-verify/work-search/.venv-py/Scripts/python.exe" "/c/tmp/docs302-verify/evidence/geosearch/g4.py" 2>&1 | tail -n 2
+radius search Python tab -> found:2
+
+### G5  Dart  geosearch.md  Radius search
+# geosearch.md lines 392-399 on this PR
+    final searchParameters = {
+      'q'         : '*',
+      'query_by'  : 'title',
+      'filter_by' : 'location:(48.90615915923891, 2.3435897727061175, 5.1 km)',
+      'sort_by'   : 'location(48.853, 2.344):asc'
+    };
+    
+    await client.collection('places').documents.search(searchParameters);
+[dart:stable] $ dart pub get 2>&1 | tail -3; dart run lib/main.dart 2>&1 | grep -E "Error:|ran$" | head -n 4
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+radius search Dart tab ran
