@@ -1,0 +1,31 @@
+
+### AU1  Java  authentication.md  Client instantiation (Java tab)
+# authentication.md lines 135-150 on typesense-website master
+    import org.typesense.api.*;
+    import org.typesense.models.*;
+    import org.typesense.resources.*;
+    
+    ArrayList<Node> nodes = new ArrayList<>();
+    nodes.add(
+      new Node(
+        "http",       // For Typesense Cloud use https
+        "localhost",  // For Typesense Cloud use xxx.a1.typesense.net
+        "8108"        // For Typesense Cloud use 443
+      )
+    );
+    
+    Configuration configuration = new Configuration(nodes, Duration.ofSeconds(2),"<API_KEY>");
+    
+    Client client = new Client(configuration);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+[ERROR] /w/src/main/java/Main.java:[2,1] package org.typesense.models does not exist
+[ERROR] /w/src/main/java/Main.java:[8,1] cannot find symbol
+  symbol:   class ArrayList
+  location: class Main
+[ERROR] /w/src/main/java/Main.java:[8,29] cannot find symbol
+[ERROR] /w/src/main/java/Main.java:[17,56] cannot find symbol
+  symbol:   variable Duration
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project ac1: Compilation failure: Compilation failure: 
+[ERROR]   symbol:   class ArrayList
+[ERROR]   location: class Main
+[ERROR]   symbol:   variable Duration

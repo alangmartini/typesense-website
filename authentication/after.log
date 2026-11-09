@@ -1,0 +1,24 @@
+
+### AU1  Java  authentication.md  Client instantiation (Java tab)
+# authentication.md lines 135-153 on this PR
+    import org.typesense.api.*;
+    import org.typesense.model.*;
+    import org.typesense.resources.*;
+    
+    import java.time.Duration;
+    import java.util.ArrayList;
+    
+    ArrayList<Node> nodes = new ArrayList<>();
+    nodes.add(
+      new Node(
+        "http",       // For Typesense Cloud use https
+        "localhost",  // For Typesense Cloud use xxx.a1.typesense.net
+        "8108"        // For Typesense Cloud use 443
+      )
+    );
+    
+    Configuration configuration = new Configuration(nodes, Duration.ofSeconds(2),"<API_KEY>");
+    
+    Client client = new Client(configuration);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+built client
