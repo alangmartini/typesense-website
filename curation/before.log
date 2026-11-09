@@ -1,0 +1,485 @@
+
+### C1  JS  curation.md  Create or update a curation set
+# curation.md lines 35-53 on typesense-website master
+    curation_set = {
+      "items": [{
+        "id": "customize-apple",
+        "rule": {
+          "query": "apple",
+          "match": "exact"
+        },
+        "includes": [
+          {"id": "422", "position": 1},
+          {"id": "54", "position": 2}
+        ],
+        "excludes": [
+          {"id": "287"}
+        ]
+      }]
+    }
+    
+    // Creates/updates an curation_set called `curate_products`.
+    client.curationSets().upsert('curate_products', curation_set)
+$ node __run.mjs
+ERROR TypeError client.curationSets(...).upsert is not a function
+
+
+### C2  JS  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 774-787 on typesense-website master
+    curation_set = {
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}",
+          "match": "exact"
+        },
+        "remove_matched_tokens": true,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+      }]
+    }
+    
+    // Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    client.curation_sets().upsert('curate_products', curation_set)
+$ node __run.mjs
+ERROR TypeError client.curation_sets is not a function
+
+
+### C3  Python  curation.md  Including or excluding documents
+# curation.md lines 254-272 on typesense-website master
+    curation_set = {
+      "items": [{
+        "id": "customize-apple",
+        "rule": {
+          "query": "apple",
+          "match": "exact"
+        },
+        "includes": [
+          {"id": "422", "position": 1},
+          {"id": "54", "position": 2}
+        ],
+        "excludes": [
+          {"id": "287"}
+        ]
+      }]
+    }
+    
+    # Creates/updates an override called `customize-apple` in the `companies` collection
+    client.curation_sets.upsert('curate_products', curation_set)
+$ venv/Scripts/python __run.py
+ERROR AttributeError 'CurationSets' object has no attribute 'upsert'
+
+
+### C4  Python  curation.md  Dynamic filtering
+# curation.md lines 473-486 on typesense-website master
+    curation_set = {
+      "items": [{
+        "id": "brand-filter",
+        "rule": {
+          "query": "{brand} phone",
+          "match": "contains"
+        },
+        "filter_by": "brand:={brand}",
+        "remove_matched_tokens": true
+      }]
+    }
+    
+    # Creates/updates an curation_set item called `brand-filter` in the `curate_products` curation_set
+    client.curation_sets.upsert('curate_products', curation_set)
+$ venv/Scripts/python __run.py
+ERROR NameError name 'true' is not defined
+
+
+### C5a  Python  curation.md  Retrieve a curation set item
+# curation.md line 1405 on typesense-website master
+    client.curation_sets['curate_products'].items['dynamic-sort-filter'].retrieve()
+$ venv/Scripts/python __run.py
+ERROR AttributeError 'CurationSet' object has no attribute 'items'
+
+
+### C5b  Python  curation.md  Delete a curation set item
+# curation.md line 1520 on typesense-website master
+    client.curation_sets['curate_products'].items['dynamic-sort-filter'].delete()
+$ venv/Scripts/python __run.py
+ERROR AttributeError 'CurationSet' object has no attribute 'items'
+
+
+### C6  Python  curation.md  List all curation set items
+# curation.md line 1463 on typesense-website master
+    client.curation_sets['curate_products'].items().retrieve()
+$ venv/Scripts/python __run.py
+ERROR AttributeError 'CurationSet' object has no attribute 'items'
+
+
+### C7  Dart  curation.md  Create or update a curation set
+# curation.md lines 136-154 on typesense-website master
+    final curation_set = {
+      "items": [{
+        "id": "customize-apple",
+        "rule": {
+          "query": "apple",
+          "match": "exact"
+        },
+        "includes": [
+          {"id": "422", "position": 1},
+          {"id": "54", "position": 2}
+        ],
+        "excludes": [
+          {"id": "287"}
+        ]
+      }]
+    };
+    
+    // Creates/updates an override called `customize-apple` in the `companies` collection
+    await client.curation_sets.upsert('curate_products', curation_set);
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:24:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.upsert('curate_products', curation_set);
+                               ^^^^^^^^^^^^^
+
+
+### C8a  Dart  curation.md  Retrieve a curation set
+# curation.md line 1047 on typesense-website master
+    await client.curation_sets.retrieve('curate_products');
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:6:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.retrieve('curate_products');
+                               ^^^^^^^^^^^^^
+
+
+### C8b  Dart  curation.md  List all curation sets
+# curation.md line 1106 on typesense-website master
+    await client.curation_sets.retrieve();
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:6:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.retrieve();
+                               ^^^^^^^^^^^^^
+
+
+### C8c  Dart  curation.md  Delete a curation set
+# curation.md line 1164 on typesense-website master
+    await client.curation_sets.delete('curate_products');
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:6:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.delete('curate_products');
+                               ^^^^^^^^^^^^^
+
+
+### C9a  Dart  curation.md  Retrieve a curation set item
+# curation.md line 1421 on typesense-website master
+    await client.curation_sets.retrieve('curate_products');
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:6:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.retrieve('curate_products');
+                               ^^^^^^^^^^^^^
+
+
+### C9b  Dart  curation.md  List all curation set items
+# curation.md line 1479 on typesense-website master
+    await client.curation_sets.retrieve('curate_products');
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:6:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.retrieve('curate_products');
+                               ^^^^^^^^^^^^^
+
+
+### C9c  Dart  curation.md  Delete a curation set item
+# curation.md line 1534 on typesense-website master
+    await client.curation_sets.delete('curate_products');
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:6:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.delete('curate_products');
+                               ^^^^^^^^^^^^^
+
+
+### C10  Dart  curation.md  Upsert a curation set item
+# curation.md lines 1284-1293 on typesense-website master
+    final curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}",
+        "match": "exact"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+    };
+    
+    await client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item);
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:15:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item);
+                               ^^^^^^^^^^^^^
+
+
+### C11a  PHP  curation.md  Upsert a curation set item
+# curation.md lines 1233-1242 on typesense-website master
+    $curation_set_item = [
+      "rule" => [
+        "filter_by" => "store:={store}",
+        "match" => "exact"
+      ],
+      "remove_matched_tokens" => true,
+      "sort_by" => "sales.{store}:desc, inventory.{store}:desc",
+    ];
+    
+    $client->curationSets['curate_products']->items['dynamic-sort-filter']->upsert($curation_set_item);
+[php:8.3-cli] $ php __run.php
+ERROR Error: Cannot access private property Typesense\CurationSet::$items
+
+
+### C11b  PHP  curation.md  Retrieve a curation set item
+# curation.md line 1397 on typesense-website master
+    $client->curationSets['curate_products']->items['dynamic-sort-filter']->retrieve();
+[php:8.3-cli] $ php __run.php
+ERROR Error: Cannot access private property Typesense\CurationSet::$items
+
+
+### C11c  PHP  curation.md  Delete a curation set item
+# curation.md line 1513 on typesense-website master
+    $client->curationSets['curate_products']->items['dynamic-sort-filter']->delete();
+[php:8.3-cli] $ php __run.php
+ERROR Error: Cannot access private property Typesense\CurationSet::$items
+
+
+### C12  PHP  curation.md  List all curation set items
+# curation.md line 1455 on typesense-website master
+    $client->curationSets['curate_products']->items->retrieve();
+[php:8.3-cli] $ php __run.php
+ERROR Error: Cannot access private property Typesense\CurationSet::$items
+
+
+### C15-Shell  Shell  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1301-1310 on typesense-website master
+    curl "http://localhost:8108/curation_sets/curate_products/items/dynamic-sort-filter" -X PUT \
+    -H "Content-Type: application/json" \
+    -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+      "rule": {
+        "filter_by": "store:={store}",
+        "match": "exact"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+    }'
+$ curl -s "http://localhost:18113/curation_sets/curate_products/items/dynamic-sort-filter" -X PUT \
+-H "Content-Type: application/json" \
+-H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+  "rule": {
+    "filter_by": "store:={store}",
+    "match": "exact"
+  },
+  "remove_matched_tokens": true,
+  "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+}'
+{"message":"The `match` field requires a `query` field to be present."}
+
+### C15-Python  Python  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1250-1259 on typesense-website master
+    curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}",
+        "match": "exact"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+    }
+    
+    client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item)
+$ venv/Scripts/python __run.py
+ERROR NameError name 'true' is not defined
+
+
+### C15-JS  JavaScript  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1216-1225 on typesense-website master
+    const curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}",
+        "match": "exact"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+    }
+    
+    client.curationSets('curate_products').items('dynamic-sort-filter').upsert(curation_set_item)
+$ node __run.mjs
+ERROR RequestMalformed Request failed with HTTP code 400 | Server said: The `match` field requires a `query` field to be present.
+
+
+### C15-PHP  PHP  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1233-1242 on typesense-website master
+    $curation_set_item = [
+      "rule" => [
+        "filter_by" => "store:={store}",
+        "match" => "exact"
+      ],
+      "remove_matched_tokens" => true,
+      "sort_by" => "sales.{store}:desc, inventory.{store}:desc",
+    ];
+    
+    $client->curationSets['curate_products']->items['dynamic-sort-filter']->upsert($curation_set_item);
+[php:8.3-cli] $ php __run.php
+ERROR Error: Cannot access private property Typesense\CurationSet::$items
+
+
+### C15-Dart  Dart  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1284-1293 on typesense-website master
+    final curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}",
+        "match": "exact"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+    };
+    
+    await client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item);
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:15:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item);
+                               ^^^^^^^^^^^^^
+
+
+### C15-Ruby  Ruby  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1267-1276 on typesense-website master
+    curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}",
+        "match": "exact"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+    }
+    
+    client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item)
+[ruby:3.3] $ ruby __run.rb
+ERROR Typesense::Error::RequestMalformed The `match` field requires a `query` field to be present.
+
+
+### C15b-Shell  Shell  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 874-886 on typesense-website master
+    curl "http://localhost:8108/curation_sets/curate_products" -X PUT \
+    -H "Content-Type: application/json" \
+    -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}",
+          "match": "exact"
+        },
+        "remove_matched_tokens": true,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+      }]
+    }'
+$ curl -s "http://localhost:18113/curation_sets/curate_products" -X PUT \
+-H "Content-Type: application/json" \
+-H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+  "items": [{
+    "id": "dynamic-sort-filter",
+    "rule": {
+      "filter_by": "store:={store}",
+      "match": "exact"
+    },
+    "remove_matched_tokens": true,
+    "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+  }]
+}'
+{"message":"The `match` field requires a `query` field to be present."}
+
+### C15b-PHP  PHP  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 795-808 on typesense-website master
+    $curation_set = [
+      "items" => [[
+        "id" => "dynamic-sort-filter",
+        "rule" => [
+          "filter_by" => "store:={store}",
+          "match" => "exact"
+        ],
+        "remove_matched_tokens" => true,
+        "sort_by" => "sales.{store}:desc, inventory.{store}:desc"
+      ]]
+    ];
+    
+    // Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    $client->curationSets->upsert('curate_products', $curation_set);
+[php:8.3-cli] $ php __run.php
+ERROR Typesense\Exceptions\RequestMalformed: The `match` field requires a `query` field to be present.
+
+
+### C15b-Python  Python  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 815-828 on typesense-website master
+    curation_set = {
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}",
+          "match": "exact"
+        },
+        "remove_matched_tokens": True,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+      }]
+    }
+    
+    # Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    client.curation_sets.upsert('curate_products', curation_set)
+$ venv/Scripts/python __run.py
+ERROR AttributeError 'CurationSets' object has no attribute 'upsert'
+
+
+### C15b-Ruby  Ruby  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 834-847 on typesense-website master
+    curation_set = {
+      "items" => [{
+        "id" => "dynamic-sort-filter",
+        "rule": {
+          "filter_by" => "store:={store}",
+          "match" => "exact"
+        },
+        "remove_matched_tokens" => true,
+        "sort_by" => "sales.{store}:desc, inventory.{store}:desc",
+      }]
+    }
+    
+    # Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    client.curation_sets.upsert('curate_products', curation_set)
+[ruby:3.3] $ ruby __run.rb
+ERROR Typesense::Error::RequestMalformed The `match` field requires a `query` field to be present.
+
+
+### C15b-Dart  Dart  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 854-867 on typesense-website master
+    final curation_set = {
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}",
+          "match": "exact"
+        },
+        "remove_matched_tokens": true,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+      }]
+    };
+    
+    // Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    await client.curation_sets.upsert('curate_products', curation_set);
+[dart:stable] $ dart run bin/__run.dart
+bin/__run.dart:19:32: Error: The getter 'curation_sets' isn't defined for the type 'Client'.
+ - 'Client' is from 'package:typesense/src/client.dart' ('/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/client.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'curation_sets'.
+    final __res = await client.curation_sets.upsert('curate_products', curation_set);
+                               ^^^^^^^^^^^^^
+

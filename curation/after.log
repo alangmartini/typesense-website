@@ -1,0 +1,437 @@
+
+### C1  JS  curation.md  Create or update a curation set
+# curation.md lines 35-53 on this PR
+    curation_set = {
+      "items": [{
+        "id": "customize-apple",
+        "rule": {
+          "query": "apple",
+          "match": "exact"
+        },
+        "includes": [
+          {"id": "422", "position": 1},
+          {"id": "54", "position": 2}
+        ],
+        "excludes": [
+          {"id": "287"}
+        ]
+      }]
+    }
+    
+    // Creates/updates an curation_set called `curate_products`.
+    client.curationSets('curate_products').upsert(curation_set)
+$ node __run.mjs
+RESULT {"items":[{"excludes":[{"id":"287"}],"filter_curated_hits":false,"id":
+
+
+### C2  JS  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 782-794 on this PR
+    curation_set = {
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}"
+        },
+        "remove_matched_tokens": true,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+      }]
+    }
+    
+    // Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    client.curationSets('curate_products').upsert(curation_set)
+$ node __run.mjs
+RESULT {"items":[{"excludes":[],"filter_curated_hits":false,"id":"dynamic-sor
+
+
+### C3  Python  curation.md  Including or excluding documents
+# curation.md lines 256-274 on this PR
+    curation_set = {
+      "items": [{
+        "id": "customize-apple",
+        "rule": {
+          "query": "apple",
+          "match": "exact"
+        },
+        "includes": [
+          {"id": "422", "position": 1},
+          {"id": "54", "position": 2}
+        ],
+        "excludes": [
+          {"id": "287"}
+        ]
+      }]
+    }
+    
+    # Creates/updates an override called `customize-apple` in the `companies` collection
+    client.curation_sets['curate_products'].upsert(curation_set)
+$ venv/Scripts/python __run.py
+RESULT {'items': [{'excludes': [{'id': '287'}], 'filter_curated_hits': False,
+
+
+### C4  Python  curation.md  Dynamic filtering
+# curation.md lines 477-490 on this PR
+    curation_set = {
+      "items": [{
+        "id": "brand-filter",
+        "rule": {
+          "query": "{brand} phone",
+          "match": "contains"
+        },
+        "filter_by": "brand:={brand}",
+        "remove_matched_tokens": True
+      }]
+    }
+    
+    # Creates/updates an curation_set item called `brand-filter` in the `curate_products` curation_set
+    client.curation_sets['curate_products'].upsert(curation_set)
+$ venv/Scripts/python __run.py
+RESULT {'items': [{'excludes': [], 'filter_by': 'brand:={brand}', 'filter_cur
+
+
+### C5a  Python  curation.md  Retrieve a curation set item
+# curation.md line 1405 on this PR
+    client.curation_sets['curate_products'].get_item('dynamic-sort-filter')
+$ venv/Scripts/python __run.py
+RESULT {'excludes': [], 'filter_curated_hits': False, 'id': 'dynamic-sort-fil
+
+
+### C5b  Python  curation.md  Delete a curation set item
+# curation.md line 1520 on this PR
+    client.curation_sets['curate_products'].delete_item('dynamic-sort-filter')
+$ venv/Scripts/python __run.py
+RESULT {'id': 'dynamic-sort-filter'}
+
+
+### C6  Python  curation.md  List all curation set items
+# curation.md line 1463 on this PR
+    client.curation_sets['curate_products'].list_items()
+$ venv/Scripts/python __run.py
+RESULT [{'excludes': [], 'filter_curated_hits': False, 'id': 'customize-apple
+
+
+### C7  Dart  curation.md  Create or update a curation set
+# curation.md lines 136-156 on this PR
+    final curation_set = {
+      "items": [{
+        "id": "customize-apple",
+        "rule": {
+          "query": "apple",
+          "match": "exact"
+        },
+        "includes": [
+          {"id": "422", "position": 1},
+          {"id": "54", "position": 2}
+        ],
+        "excludes": [
+          {"id": "287"}
+        ]
+      }]
+    };
+    
+    // Creates/updates an override called `customize-apple` in the `companies` collection
+    await client.curationSet('curate_products').upsert(CurationSetUpsertSchema(
+      items: [for (final item in curation_set['items']!) CurationObjectSchema.fromJson(item)],
+    ));
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C8a  Dart  curation.md  Retrieve a curation set
+# curation.md line 1051 on this PR
+    await client.curationSet('curate_products').retrieve();
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C8b  Dart  curation.md  List all curation sets
+# curation.md line 1110 on this PR
+    await client.curationSets.retrieve();
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C8c  Dart  curation.md  Delete a curation set
+# curation.md line 1168 on this PR
+    await client.curationSet('curate_products').delete();
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C9a  Dart  curation.md  Retrieve a curation set item
+# curation.md line 1421 on this PR
+    await client.curationSet('curate_products').item('dynamic-sort-filter').retrieve();
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C9b  Dart  curation.md  List all curation set items
+# curation.md line 1479 on this PR
+    await client.curationSet('curate_products').items().retrieve();
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C9c  Dart  curation.md  Delete a curation set item
+# curation.md line 1534 on this PR
+    await client.curationSet('curate_products').item('dynamic-sort-filter').delete();
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C10  Dart  curation.md  Upsert a curation set item
+# curation.md lines 1284-1294 on this PR
+    final curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+    };
+    
+    await client.curationSet('curate_products').item('dynamic-sort-filter').upsert(
+      CurationObjectSchema.fromJson({'id': 'dynamic-sort-filter', ...curation_set_item}),
+    );
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C11a  PHP  curation.md  Upsert a curation set item
+# curation.md lines 1236-1244 on this PR
+    $curation_set_item = [
+      "rule" => [
+        "filter_by" => "store:={store}"
+      ],
+      "remove_matched_tokens" => true,
+      "sort_by" => "sales.{store}:desc, inventory.{store}:desc",
+    ];
+    
+    $client->curationSets['curate_products']->getItems()['dynamic-sort-filter']->upsert($curation_set_item);
+[php:8.3-cli] $ php __run.php
+RESULT {"id":"dynamic-sort-filter","remove_matched_tokens":true,"rule":{"filt
+
+
+### C11b  PHP  curation.md  Retrieve a curation set item
+# curation.md line 1397 on this PR
+    $client->curationSets['curate_products']->getItems()['dynamic-sort-filter']->retrieve();
+[php:8.3-cli] $ php __run.php
+RESULT {"excludes":[],"filter_curated_hits":false,"id":"dynamic-sort-filter",
+
+
+### C11c  PHP  curation.md  Delete a curation set item
+# curation.md line 1513 on this PR
+    $client->curationSets['curate_products']->getItems()['dynamic-sort-filter']->delete();
+[php:8.3-cli] $ php __run.php
+RESULT {"id":"dynamic-sort-filter"}
+
+
+### C12  PHP  curation.md  List all curation set items
+# curation.md line 1455 on this PR
+    $client->curationSets['curate_products']->getItems()->retrieve();
+[php:8.3-cli] $ php __run.php
+RESULT [{"excludes":[],"filter_curated_hits":false,"id":"customize-apple","in
+
+
+### C15-Shell  Shell  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1302-1310 on this PR
+    curl "http://localhost:8108/curation_sets/curate_products/items/dynamic-sort-filter" -X PUT \
+    -H "Content-Type: application/json" \
+    -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+      "rule": {
+        "filter_by": "store:={store}"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+    }'
+$ curl -s "http://localhost:18113/curation_sets/curate_products/items/dynamic-sort-filter" -X PUT \
+-H "Content-Type: application/json" \
+-H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+  "rule": {
+    "filter_by": "store:={store}"
+  },
+  "remove_matched_tokens": true,
+  "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+}'
+{"id":"dynamic-sort-filter","remove_matched_tokens":true,"rule":{"filter_by":"store:={store}"},"sort_by":"sales.{store}:desc, inventory.{store}:desc"}
+
+### C15-Python  Python  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1252-1260 on this PR
+    curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}"
+      },
+      "remove_matched_tokens": True,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+    }
+    
+    client.curation_sets['curate_products'].upsert_item('dynamic-sort-filter', curation_set_item)
+$ venv/Scripts/python __run.py
+RESULT {'id': 'dynamic-sort-filter', 'remove_matched_tokens': True, 'rule': {
+
+
+### C15-JS  JavaScript  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1220-1228 on this PR
+    const curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+    }
+    
+    client.curationSets('curate_products').items('dynamic-sort-filter').upsert(curation_set_item)
+$ node __run.mjs
+RESULT {"id":"dynamic-sort-filter","remove_matched_tokens":true,"rule":{"filt
+
+
+### C15-PHP  PHP  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1236-1244 on this PR
+    $curation_set_item = [
+      "rule" => [
+        "filter_by" => "store:={store}"
+      ],
+      "remove_matched_tokens" => true,
+      "sort_by" => "sales.{store}:desc, inventory.{store}:desc",
+    ];
+    
+    $client->curationSets['curate_products']->getItems()['dynamic-sort-filter']->upsert($curation_set_item);
+[php:8.3-cli] $ php __run.php
+RESULT {"id":"dynamic-sort-filter","remove_matched_tokens":true,"rule":{"filt
+
+
+### C15-Dart  Dart  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1284-1294 on this PR
+    final curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+    };
+    
+    await client.curationSet('curate_products').item('dynamic-sort-filter').upsert(
+      CurationObjectSchema.fromJson({'id': 'dynamic-sort-filter', ...curation_set_item}),
+    );
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
+
+### C15-Ruby  Ruby  curation.md  Upsert a curation set item (dynamic-sort-filter)
+# curation.md lines 1268-1276 on this PR
+    curation_set_item = {
+      "rule": {
+        "filter_by": "store:={store}"
+      },
+      "remove_matched_tokens": true,
+      "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+    }
+    
+    client.curation_sets['curate_products'].items['dynamic-sort-filter'].upsert(curation_set_item)
+[ruby:3.3] $ ruby __run.rb
+RESULT {"id"=>"dynamic-sort-filter", "remove_matched_tokens"=>true, "rule"=>{
+
+
+### C15b-Shell  Shell  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 879-890 on this PR
+    curl "http://localhost:8108/curation_sets/curate_products" -X PUT \
+    -H "Content-Type: application/json" \
+    -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}"
+        },
+        "remove_matched_tokens": true,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+      }]
+    }'
+$ curl -s "http://localhost:18113/curation_sets/curate_products" -X PUT \
+-H "Content-Type: application/json" \
+-H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" -d '{
+  "items": [{
+    "id": "dynamic-sort-filter",
+    "rule": {
+      "filter_by": "store:={store}"
+    },
+    "remove_matched_tokens": true,
+    "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+  }]
+}'
+{"items":[{"excludes":[],"filter_curated_hits":false,"id":"dynamic-sort-filter","includes":[],"remove_matched_tokens":true,"rule":{"filter_by":"store:={store}","stem":false,"synonyms":false},"sort_by":"sales.{store}:desc, inventory.{store}:desc","stop_processing":true}],"name":"curate_products"}
+
+### C15b-PHP  PHP  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 802-814 on this PR
+    $curation_set = [
+      "items" => [[
+        "id" => "dynamic-sort-filter",
+        "rule" => [
+          "filter_by" => "store:={store}"
+        ],
+        "remove_matched_tokens" => true,
+        "sort_by" => "sales.{store}:desc, inventory.{store}:desc"
+      ]]
+    ];
+    
+    // Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    $client->curationSets->upsert('curate_products', $curation_set);
+[php:8.3-cli] $ php __run.php
+RESULT {"items":[{"excludes":[],"filter_curated_hits":false,"id":"dynamic-sor
+
+
+### C15b-Python  Python  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 821-833 on this PR
+    curation_set = {
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}"
+        },
+        "remove_matched_tokens": True,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc",
+      }]
+    }
+    
+    # Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    client.curation_sets['curate_products'].upsert(curation_set)
+$ venv/Scripts/python __run.py
+RESULT {'items': [{'excludes': [], 'filter_curated_hits': False, 'id': 'dynam
+
+
+### C15b-Ruby  Ruby  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 839-851 on this PR
+    curation_set = {
+      "items" => [{
+        "id" => "dynamic-sort-filter",
+        "rule": {
+          "filter_by" => "store:={store}"
+        },
+        "remove_matched_tokens" => true,
+        "sort_by" => "sales.{store}:desc, inventory.{store}:desc",
+      }]
+    }
+    
+    # Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    client.curation_sets.upsert('curate_products', curation_set)
+[ruby:3.3] $ ruby __run.rb
+RESULT {"items"=>[{"excludes"=>[], "filter_curated_hits"=>false, "id"=>"dynam
+
+
+### C15b-Dart  Dart  curation.md  Dynamic sorting (filter-based rules)
+# curation.md lines 858-872 on this PR
+    final curation_set = {
+      "items": [{
+        "id": "dynamic-sort-filter",
+        "rule": {
+          "filter_by": "store:={store}"
+        },
+        "remove_matched_tokens": true,
+        "sort_by": "sales.{store}:desc, inventory.{store}:desc"
+      }]
+    };
+    
+    // Creates/updates an curation_set item called `dynamic-sort-filter` in the `curate_products` curation_set
+    await client.curationSet('curate_products').upsert(CurationSetUpsertSchema(
+      items: [for (final item in curation_set['items']!) CurationObjectSchema.fromJson(item)],
+    ));
+[dart:stable] $ dart run bin/__run.dart
+RESULT ok
+
