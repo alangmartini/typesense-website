@@ -1,0 +1,260 @@
+
+### V6  Java  vector-search.md  Create a collection with a vector field (num_dim)
+# vector-search.md lines 218-224 on typesense-website master
+    collectionschema.name("docs")
+                    .addFieldsItem(new Field().name("title").type("string"))
+                    .addFieldsItem(new Field().name("points").type("int32"))
+                    .addFieldsItem(new Field().name("embedding").type("float[]").num_dim(4))
+                    .defaultSortingField("points");
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ rm -f out/V6.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V6.java 2>c_V6.txt; rc=$?; cat c_V6.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V6 2>&1 | /trim; fi
+src/main/java/V6.java:7: error: cannot find symbol
+collectionschema.name("docs")
+^
+  symbol:   variable collectionschema
+  location: class V6
+src/main/java/V6.java:10: error: cannot find symbol
+                .addFieldsItem(new Field().name("embedding").type("float[]").num_dim(4))
+                                                                            ^
+  symbol:   method num_dim(int)
+  location: class Field
+2 errors
+
+### V3, V4  Java  vector-search.md  Add a document with its embedding
+# vector-search.md lines 352-359 on typesense-website master
+    HaashMap<String, Object> document = new HashMap<>();
+    float[] embedding =  {0.04, 0.234, 0.113, 0.001}
+    
+    document.add("title", "Louvre Museuem");
+    document.add("points", 1);
+    document.add("embedding", embedding);
+    
+    client.collection("docs").documents.create(document);
+[maven:3-eclipse-temurin-17] $ rm -f out/V3V4.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V3V4.java 2>c_V3V4.txt; rc=$?; cat c_V3V4.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V3V4 2>&1 | /trim; fi
+src/main/java/V3V4.java:6: error: ';' expected
+float[] embedding =  {0.04, 0.234, 0.113, 0.001}
+                                                ^
+1 error
+
+### V1  JavaScript  vector-search.md  Built-in models (create collection)
+# vector-search.md lines 441-442 on typesense-website master
+    
+    client.collections('products').create(schema);
+$ cd "/c/tmp/docs302-verify/evidence/vector-search/js" && node v1.js
+C:\tmp\docs302-verify\evidence\vector-search\js\v1.js:30
+client.collections('products').create(schema);
+                               ^
+
+TypeError: client.collections(...).create is not a function
+    at Object.<anonymous> (C:\tmp\docs302-verify\evidence\vector-search\js\v1.js:30:32)
+    at Module._compile (node:internal/modules/cjs/loader:1830:14)
+    at Object..js (node:internal/modules/cjs/loader:1961:10)
+    at Module.load (node:internal/modules/cjs/loader:1553:32)
+    at Module._load (node:internal/modules/cjs/loader:1355:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.15.0
+
+### K1  Java  vector-search.md  Built-in models (create collection, Java tab)
+# vector-search.md lines 560-565 on typesense-website master
+    collectionschema.name("products")
+                    .addFieldsItem(new Field().name("product_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("categories").type(FieldTypes.STRING_ARRAY))
+                    .addFieldsItem(new Field().name("embedding").type(FieldTypes.FLOAT_ARRAY).embed(
+                      new FieldEmbed().from(embedFrom).modelConfig(new FieldEmbedModelConfig().modelName("ts/e5-small"))
+                    ));
+[maven:3-eclipse-temurin-17] $ rm -f out/K1.class; javac -cp "$(cat cp.txt)" -d out src/main/java/K1.java 2>c_K1.txt; rc=$?; cat c_K1.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" K1 2>&1 | /trim; fi
+src/main/java/K1.java:9: error: cannot find symbol
+collectionschema.name("products")
+^
+  symbol:   variable collectionschema
+  location: class K1
+1 error
+
+### V2  Go  vector-search.md  Built-in models (create collection, Go)
+# vector-search.md lines 590-596 on typesense-website master
+            From        []string "json:\"from\""
+            ModelConfig struct {
+              AccessToken    *string "json:\"access_token,omitempty\""
+              ApiKey         *string "json:\"api_key,omitempty\""
+              ClientId       *string "json:\"client_id,omitempty\""
+              ClientSecret   *string "json:\"client_secret,omitempty\""
+              DocumentTask   *string "json:\"document_task,omitempty\""
+$ cd "/c/tmp/docs302-verify/evidence/vector-search/go" && go run v2.go
+# command-line-arguments
+.\v2.go:20:14: cannot use &struct{From []string "json:\"from\""; ModelConfig struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; DocumentTask *string "json:\"document_task,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; QueryTask *string "json:\"query_task,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""} "json:\"model_config\""}{…} (value of type *struct{From []string "json:\"from\""; ModelConfig struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; DocumentTask *string "json:\"document_task,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; QueryTask *string "json:\"query_task,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""} "json:\"model_config\""}) as *struct{From []string "json:\"from\""; ModelConfig struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""} "json:\"model_config\""} value in struct literal
+
+### V5  Java  vector-search.md  Using OpenAI (unclosed modelConfig paren)
+# vector-search.md lines 1101-1109 on typesense-website master
+    
+    collectionschema.name("products")
+                    .addFieldsItem(new Field().name("product_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("categories").type(FieldTypes.STRING_ARRAY))
+                    .addFieldsItem(new Field().name("embedding").type(FieldTypes.FLOAT_ARRAY).embed(
+                      new FieldEmbed().from(embedFrom).modelConfig(new FieldEmbedModelConfig().modelName("openai/text-embedding-ada-002").apiKey("your_openai_api_key")
+                    ));
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ rm -f out/V5.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V5.java 2>c_V5.txt; rc=$?; cat c_V5.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V5 2>&1 | /trim; fi
+src/main/java/V5.java:16: error: ')' expected
+                ));
+                  ^
+1 error
+
+### V9  Java  vector-search.md  Using OpenAI-compatible APIs (unclosed modelConfig paren)
+# vector-search.md lines 1382-1390 on typesense-website master
+    
+    collectionschema.name("products")
+                    .addFieldsItem(new Field().name("product_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("categories").type(FieldTypes.STRING_ARRAY))
+                    .addFieldsItem(new Field().name("embedding").type(FieldTypes.FLOAT_ARRAY).embed(
+                      new FieldEmbed().from(embedFrom).modelConfig(new FieldEmbedModelConfig().modelName("openai/text-embedding-ada-002").apiKey("your_api_key_as_required_by_the_custom_provider").url("https://your-custom-openai-compatible-api.domain.com")
+                    ));
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ rm -f out/V9.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V9.java 2>c_V9.txt; rc=$?; cat c_V9.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V9 2>&1 | /trim; fi
+src/main/java/V9.java:16: error: ')' expected
+                ));
+                  ^
+1 error
+
+### V10  PHP  vector-search.md  Using Google Cloud (PHP array syntax)
+# vector-search.md lines 1896-1898 on typesense-website master
+              "region": "us-central1"
+            ]
+          }
+[php:8.3-cli] $ php v10.php
+
+Parse error: syntax error, unexpected token ":", expecting "]" in /w/v10.php on line 27
+
+### V11  Go  vector-search.md  Using Google Cloud (Go has no region field)
+# vector-search.md lines 2051-2055 on typesense-website master
+              ClientId:     pointer.Any("your_gcp_app_client_id"),
+              ClientSecret: pointer.Any("your_gcp_client_secret"),
+              ProjectId:    pointer.Any("your_gcp_project_id"),
+              DocumentTask: pointer.Any("DOCUMENT"),
+              QueryTask:    pointer.Any("QUERY"),
+$ cd "/c/tmp/docs302-verify/evidence/vector-search/go" && go run v11.go
+# command-line-arguments
+.\v11.go:11:14: cannot use &struct{From []string "json:\"from\""; ModelConfig struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; DocumentTask *string "json:\"document_task,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; QueryTask *string "json:\"query_task,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""} "json:\"model_config\""}{…} (value of type *struct{From []string "json:\"from\""; ModelConfig struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; DocumentTask *string "json:\"document_task,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; QueryTask *string "json:\"query_task,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""} "json:\"model_config\""}) as *struct{From []string "json:\"from\""; ModelConfig struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""} "json:\"model_config\""} value in struct literal
+.\v11.go:51:11: unknown field Region in struct literal of type struct{AccessToken *string "json:\"access_token,omitempty\""; ApiKey *string "json:\"api_key,omitempty\""; ClientId *string "json:\"client_id,omitempty\""; ClientSecret *string "json:\"client_secret,omitempty\""; DocumentTask *string "json:\"document_task,omitempty\""; IndexingPrefix *string "json:\"indexing_prefix,omitempty\""; ModelName string "json:\"model_name\""; ProjectId *string "json:\"project_id,omitempty\""; QueryPrefix *string "json:\"query_prefix,omitempty\""; QueryTask *string "json:\"query_task,omitempty\""; RefreshToken *string "json:\"refresh_token,omitempty\""; Url *string "json:\"url,omitempty\""}
+
+### V13  Python  vector-search.md  Vector search query parameters (prefix: false)
+# vector-search.md lines 2200-2204 on typesense-website master
+      'query_by'                   : 'embedding',
+      'prefix'                     : false,
+      'remote_embedding_timeout_ms': 5000,
+      'remote_embedding_num_try'   : 3
+    }
+$ "/c/tmp/docs302-verify/evidence/vector-search/py/venv/Scripts/python.exe" "/c/tmp/docs302-verify/evidence/vector-search/py/v13.py"
+Traceback (most recent call last):
+  File "C:\tmp\docs302-verify\evidence\vector-search\py\v13.py", line 6, in <module>
+    'prefix'                     : false,
+                                   ^^^^^
+NameError: name 'false' is not defined. Did you mean: 'False'?
+
+### V15  Python  vector-search.md  Import documents in bulk (import is a reserved word)
+# vector-search.md lines 2318-2321 on typesense-website master
+      'remote_embedding_batch_size': 200
+    }
+    
+    client.collections['products'].documents.import(documents, import_parameters)
+$ "/c/tmp/docs302-verify/evidence/vector-search/py/venv/Scripts/python.exe" "/c/tmp/docs302-verify/evidence/vector-search/py/v15.py"
+  File "C:\tmp\docs302-verify\evidence\vector-search\py\v15.py", line 8
+    client.collections['products'].documents.import(documents, import_parameters)
+                                             ^^^^^^
+SyntaxError: invalid syntax
+
+### V16  Java  vector-search.md  Import documents in bulk (Java: import is a keyword, wrong class name)
+# vector-search.md lines 2340-2343 on typesense-website master
+    ImportDocumentParameters importDocumentParameters = new ImportDocumentParameters();
+    importDocumentParameters.remoteEmbeddingBatchSize(200);
+    
+    client.collections("products").documents().import(documents, importDocumentParameters);
+[maven:3-eclipse-temurin-17] $ rm -f out/V16.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V16.java 2>c_V16.txt; rc=$?; cat c_V16.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V16 2>&1 | /trim; fi
+src/main/java/V16.java:10: error: <identifier> expected
+client.collections("products").documents().import(documents, importDocumentParameters);
+                                           ^
+src/main/java/V16.java:10: error: not a statement
+                                          ^
+                                                  ^
+src/main/java/V16.java:10: error: ';' expected
+                                                           ^
+                                                             ^
+                                                                                     ^
+6 errors
+
+### V17  Ruby  vector-search.md  Your own model (embed hash closed with the wrong bracket)
+# vector-search.md lines 2501-2508 on typesense-website master
+          "type" => "float[]",
+          "embed" => [
+            "from" => ["product_name"],
+            "model_config" => [
+              "model_name" => "test_model"
+            ]
+          }
+        }
+[ruby:3.3] $ bundle config set path vendor/bundle >/dev/null 2>&1; bundle check >/dev/null 2>&1 || bundle install >/dev/null 2>&1; bundle exec ruby v17.rb
+v17.rb: --> v17.rb
+
+Unmatched `}', missing `{' ?
+Unmatched `[', missing `]' ?
+
+   4  schema = {
+   6    "fields" => [
+  11      {
+> 12        "name" => "embedding",
+> 13        "type" => "float[]",
+> 14        "embed" => [
+> 15          "from" => ["product_name"],
+> 16          "model_config" => [
+> 18          ]
+> 19        }
+  20      }
+  21    ]
+  22  }
+
+v17.rb:19: syntax error, unexpected '}', expecting ']' (SyntaxError)
+      }
+      ^
+
+
+### V18  Shell  vector-search.md  Nearest-neighbor vector search (missing collection in the search body)
+# vector-search.md lines 3425-3437 on typesense-website master
+    curl 'http://localhost:8108/multi_search' \
+        -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+        -X POST \
+        -d '{
+              "searches": [
+                {
+                  "q": "chair",
+                  "query_by": "product_name",
+                  "vector_query": "embedding:([0.2, 0.4, 0.1])",
+                  "sort_by": "_text_match:desc"
+                }
+              ]
+            }'
+$ curl -s 'http://localhost:18116/multi_search' -H 'X-TYPESENSE-API-KEY: xyz' -X POST -d @"/c/tmp/docs302-verify/evidence/vector-search/v18-body.json"
+{"results":[{"code":404,"error":"Collection not found"}]}
+### Q1  Java  vector-search.md  Multi search with vector_query (HashMap no longer compiles against typesense-java 2.1.0)
+# vector-search.md lines 2976-2981 on typesense-website master
+    HashMap<String,String > search1 = new HashMap<>();
+    search1.put("collection","docs");
+    search1.put("q","*");
+    search1.put("vector_query", "embedding:([0.96826, 0.94, 0.39557, 0.306488], k:100)"); //  <=== Be sure to replace `embedding` with the name of the field that stores your embeddings.
+    search1.put("exclude_fields", "embedding"); // <=== Don't return the raw floating point numbers in the vector field in the search API response, to save on network bandwidth.
+    
+[maven:3-eclipse-temurin-17] $ rm -f out/Q1.class; javac -cp "$(cat cp.txt)" -d out src/main/java/Q1.java 2>c_Q1.txt; rc=$?; cat c_Q1.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" Q1 2>&1 | /trim; fi
+src/main/java/Q1.java:20: error: incompatible types: HashMap<String,List<HashMap<String,String>>> cannot be converted to MultiSearchSearchesParameter
+client.multiSearch.perform(searchRequests, commonSearchParams);
+                           ^
+src/main/java/Q1.java:21: error: cannot find symbol
+  System.out.println("-> OK results=" + result.getResults().size());
+                                        ^
+  symbol:   variable result
+  location: class Q1
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+2 errors

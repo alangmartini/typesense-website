@@ -1,0 +1,176 @@
+
+### V6  Java  vector-search.md  Create a collection with a vector field (num_dim)
+# vector-search.md lines 218-224 on this PR
+    collectionSchema.name("docs")
+                    .addFieldsItem(new Field().name("title").type("string"))
+                    .addFieldsItem(new Field().name("points").type("int32"))
+                    .addFieldsItem(new Field().name("embedding").type("float[]").numDim(4))
+                    .defaultSortingField("points");
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ rm -f out/V6.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V6.java 2>c_V6.txt; rc=$?; cat c_V6.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V6 2>&1 | /trim; fi
+-> OK docs num_documents=0
+
+### V3, V4  Java  vector-search.md  Add a document with its embedding
+# vector-search.md lines 352-359 on this PR
+    Map<String, Object> document = new HashMap<>();
+    float[] embedding = {0.04f, 0.234f, 0.113f, 0.001f};
+    
+    document.put("title", "Louvre Museuem");
+    document.put("points", 1);
+    document.put("embedding", embedding);
+    
+    client.collections("docs").documents().create(document);
+[maven:3-eclipse-temurin-17] $ rm -f out/V3V4.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V3V4.java 2>c_V3V4.txt; rc=$?; cat c_V3V4.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V3V4 2>&1 | /trim; fi
+-> OK docs num_documents=1
+
+### V1  JavaScript  vector-search.md  Built-in models (create collection)
+# vector-search.md lines 441-442 on this PR
+    
+    client.collections().create(schema);
+$ cd "/c/tmp/docs302-verify/evidence/vector-search/js" && node v1.js
+-> OK products num_fields=3
+
+### K1  Java  vector-search.md  Built-in models (create collection, Java tab)
+# vector-search.md lines 560-565 on this PR
+    collectionSchema.name("products")
+                    .addFieldsItem(new Field().name("product_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("categories").type(FieldTypes.STRING_ARRAY))
+                    .addFieldsItem(new Field().name("embedding").type(FieldTypes.FLOAT_ARRAY).embed(
+                      new FieldEmbed().from(embedFrom).modelConfig(new FieldEmbedModelConfig().modelName("ts/e5-small"))
+                    ));
+[maven:3-eclipse-temurin-17] $ rm -f out/K1.class; javac -cp "$(cat cp.txt)" -d out src/main/java/K1.java 2>c_K1.txt; rc=$?; cat c_K1.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" K1 2>&1 | /trim; fi
+-> OK products
+
+### V2  Go  vector-search.md  Built-in models (create collection, Go)
+# vector-search.md lines 590-596 on this PR
+            From        []string "json:\"from\""
+            ModelConfig struct {
+              AccessToken    *string "json:\"access_token,omitempty\""
+              ApiKey         *string "json:\"api_key,omitempty\""
+              ClientId       *string "json:\"client_id,omitempty\""
+              ClientSecret   *string "json:\"client_secret,omitempty\""
+              IndexingPrefix *string "json:\"indexing_prefix,omitempty\""
+$ cd "/c/tmp/docs302-verify/evidence/vector-search/go" && go run v2.go
+-> OK products
+
+### V5  Java  vector-search.md  Using OpenAI (unclosed modelConfig paren)
+# vector-search.md lines 1093-1101 on this PR
+    
+    collectionSchema.name("products")
+                    .addFieldsItem(new Field().name("product_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("categories").type(FieldTypes.STRING_ARRAY))
+                    .addFieldsItem(new Field().name("embedding").type(FieldTypes.FLOAT_ARRAY).embed(
+                      new FieldEmbed().from(embedFrom).modelConfig(new FieldEmbedModelConfig().modelName("openai/text-embedding-ada-002").apiKey("your_openai_api_key"))
+                    ));
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ rm -f out/V5.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V5.java 2>c_V5.txt; rc=$?; cat c_V5.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V5 2>&1 | /trim; fi
+-> compiled, request reached the server (placeholder key, nothing real used)
+-> server: OpenAI API error: Incorrect API key provided: your_ope*******_key. You can find your API key at https://platform.openai.com/account/api-keys.
+
+### V9  Java  vector-search.md  Using OpenAI-compatible APIs (unclosed modelConfig paren)
+# vector-search.md lines 1370-1378 on this PR
+    
+    collectionSchema.name("products")
+                    .addFieldsItem(new Field().name("product_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("categories").type(FieldTypes.STRING_ARRAY))
+                    .addFieldsItem(new Field().name("embedding").type(FieldTypes.FLOAT_ARRAY).embed(
+                      new FieldEmbed().from(embedFrom).modelConfig(new FieldEmbedModelConfig().modelName("openai/text-embedding-ada-002").apiKey("your_api_key_as_required_by_the_custom_provider").url("https://your-custom-openai-compatible-api.domain.com"))
+                    ));
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ rm -f out/V9.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V9.java 2>c_V9.txt; rc=$?; cat c_V9.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V9 2>&1 | /trim; fi
+-> compiled, request reached the server (placeholder url/key, nothing real used)
+-> server: OpenAI API error: {"message":"Bad request."}
+
+### V10  PHP  vector-search.md  Using Google Cloud (PHP array syntax)
+# vector-search.md lines 1876-1878 on this PR
+              "region" => "us-central1"
+            ]
+          ]
+[php:8.3-cli] $ php v10.php
+-> compiled, request reached the server (placeholder GCP creds, nothing real used)
+-> server: Invalid client_id, client_secret or refresh_token in `embed.model config'.
+
+### V11  Go  vector-search.md  Using Google Cloud (Go has no region field)
+# vector-search.md lines 2027-2031 on this PR
+              ClientId:     pointer.Any("your_gcp_app_client_id"),
+              ClientSecret: pointer.Any("your_gcp_client_secret"),
+              ProjectId:    pointer.Any("your_gcp_project_id"),
+              // typesense-go has no document_task, query_task or region on model_config (checked up to
+              // v4.0.0-alpha2). Use the Shell example to set them.
+$ cd "/c/tmp/docs302-verify/evidence/vector-search/go" && go run v11.go
+-> compiled, request reached the server (placeholder GCP creds, nothing real used)
+-> server: status: 400 response: {"message":"Invalid client_id, client_secret or refresh_token in `embed.model config'."}
+
+### V13  Python  vector-search.md  Vector search query parameters (prefix: false)
+# vector-search.md lines 2175-2179 on this PR
+      'query_by'                   : 'embedding',
+      'prefix'                     : False,
+      'remote_embedding_timeout_ms': 5000,
+      'remote_embedding_num_try'   : 3
+    }
+$ "/c/tmp/docs302-verify/evidence/vector-search/py/venv/Scripts/python.exe" "/c/tmp/docs302-verify/evidence/vector-search/py/v13.py"
+-> OK found= 1
+
+### V15  Python  vector-search.md  Import documents in bulk (import is a reserved word)
+# vector-search.md lines 2293-2296 on this PR
+      'remote_embedding_batch_size': 200
+    }
+    
+    client.collections['products'].documents.import_(documents, import_parameters)
+$ "/c/tmp/docs302-verify/evidence/vector-search/py/venv/Scripts/python.exe" "/c/tmp/docs302-verify/evidence/vector-search/py/v15.py"
+-> OK num_documents= 1
+
+### V16  Java  vector-search.md  Import documents in bulk (Java: import is a keyword, wrong class name)
+# vector-search.md lines 2315-2318 on this PR
+    ImportDocumentsParameters importDocumentsParameters = new ImportDocumentsParameters();
+    importDocumentsParameters.remoteEmbeddingBatchSize(200);
+    
+    client.collections("products").documents().import_(documents, importDocumentsParameters);
+[maven:3-eclipse-temurin-17] $ rm -f out/V16.class; javac -cp "$(cat cp.txt)" -d out src/main/java/V16.java 2>c_V16.txt; rc=$?; cat c_V16.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" V16 2>&1 | /trim; fi
+-> OK num_documents=1
+
+### V17  Ruby  vector-search.md  Your own model (embed hash closed with the wrong bracket)
+# vector-search.md lines 2476-2483 on this PR
+          "type" => "float[]",
+          "embed" => {
+            "from" => ["product_name"],
+            "model_config" => {
+              "model_name" => "test_model"
+            }
+          }
+        }
+[ruby:3.3] $ bundle config set path vendor/bundle >/dev/null 2>&1; bundle check >/dev/null 2>&1 || bundle install >/dev/null 2>&1; bundle exec ruby v17.rb
+-> compiled, request reached the server (placeholder model, nothing real used)
+-> server: Model file not found
+
+### V18  Shell  vector-search.md  Nearest-neighbor vector search (missing collection in the search body)
+# vector-search.md lines 3391-3404 on this PR
+    curl 'http://localhost:8108/multi_search' \
+        -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+        -X POST \
+        -d '{
+              "searches": [
+                {
+                  "collection": "products",
+                  "q": "chair",
+                  "query_by": "product_name",
+                  "vector_query": "embedding:([0.2, 0.4, 0.1])",
+                  "sort_by": "_text_match:desc"
+                }
+              ]
+            }'
+$ curl -s 'http://localhost:18116/multi_search' -H 'X-TYPESENSE-API-KEY: xyz' -X POST -d @"/c/tmp/docs302-verify/evidence/vector-search/v18-body.json"
+{"results":[{"facet_counts":[],"found":0,"hits":[],"out_of":0,"page":1,"request_params":{"collection_name":"products","first_q":"chair","per_page":10,"q":"chair"},"search_cutoff":false,"search_time_ms":0}]}
+### Q1  Java  vector-search.md  Multi search with vector_query (HashMap no longer compiles against typesense-java 2.1.0)
+# vector-search.md lines 2944-2949 on this PR
+    MultiSearchCollectionParameters search1 = new MultiSearchCollectionParameters();
+    search1.setCollection("docs");
+    search1.setQ("*");
+    search1.setVectorQuery("embedding:([0.96826, 0.94, 0.39557, 0.306488], k:100)"); //  <=== Be sure to replace `embedding` with the name of the field that stores your embeddings.
+    search1.setExcludeFields("embedding"); // <=== Don't return the raw floating point numbers in the vector field in the search API response, to save on network bandwidth.
+    
+[maven:3-eclipse-temurin-17] $ rm -f out/Q1.class; javac -cp "$(cat cp.txt)" -d out src/main/java/Q1.java 2>c_Q1.txt; rc=$?; cat c_Q1.txt | /trim; if [ $rc -eq 0 ]; then java -cp "out:$(cat cp.txt)" Q1 2>&1 | /trim; fi
+-> OK results=1
