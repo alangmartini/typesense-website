@@ -1,0 +1,28 @@
+
+### W1  Shell  stopwords.md  Using stopwords during search
+# stopwords.md lines 47-58 on this PR
+    curl "http://localhost:8108/multi_search" -X POST \
+        -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+        -d '{
+          "searches": [
+            {
+              "collection": "books",
+              "q": "the",
+              "query_by": "title",
+              "stopwords": "stopword_set1"
+            }
+          ]
+        }'
+$ curl -s "http://localhost:18111/multi_search" -X POST \
+    -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+    -d '{
+      "searches": [
+        {
+          "collection": "books",
+          "q": "the",
+          "query_by": "title",
+          "stopwords": "stopword_set1"
+        }
+      ]
+    }' | head -c 200; echo
+{"results":[{"facet_counts":[],"found":1,"hits":[{"document":{"id":"0","title":"The Great Gatsby"},"highlight":{"title":{"matched_tokens":["The"],"snippet":"<mark>The</mark> Great Gatsby"}},"highlight
