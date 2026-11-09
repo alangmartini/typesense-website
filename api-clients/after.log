@@ -1,0 +1,16 @@
+
+### AC1  Java  api-clients.md  Libraries (Java tab)
+# api-clients.md lines 102-104 on this PR
+    import org.typesense.api.*;
+    import org.typesense.model.*;
+    import org.typesense.resources.*;
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+imports ok
+
+### AC2  Swift  api-clients.md  Libraries (Swift tab)
+# api-clients.md lines 129-131 on this PR
+    dependencies: [
+               .package(url: "https://github.com/typesense/typesense-swift", .upToNextMajor(from: "1.0.1")),
+    ],
+[swift:5.10] $ swift package dump-package 2>&1 | grep -m1 "expected" || echo "Package.swift parses ok"
+Package.swift parses ok

@@ -1,0 +1,17 @@
+
+### AC1  Java  api-clients.md  Libraries (Java tab)
+# api-clients.md lines 102-104 on typesense-website master
+    import org.typesense.api.*;
+    import org.typesense.models.*;
+    import org.typesense.resources.*;
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+[ERROR] /w/src/main/java/Main.java:[2,1] package org.typesense.models does not exist
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project ac1: Compilation failure
+
+### AC2  Swift  api-clients.md  Libraries (Swift tab)
+# api-clients.md lines 129-131 on typesense-website master
+    dependencies: [
+               .package(url: "https://github.com/typesense/typesense-swift", .upToNextMajor(from: "0.1.0"),
+    ],
+[swift:5.10] $ swift package dump-package 2>&1 | grep -m1 "expected" || echo "Package.swift parses ok"
+/w/Package.swift:9:1: error: expected expression in list of expressions
