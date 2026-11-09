@@ -1,0 +1,247 @@
+
+### S1  JavaScript  synonyms.md  Upsert a synonym set item
+# synonyms.md lines 649-656 on this PR
+    synonymSetItem = {
+      root: 'smart phone',
+      synonyms: ['iphone', 'android'],
+    }
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    client.synonymSets('tech-synonyms').items().upsert('smart-phone-synonyms', synonymSetItem)
+    
+$ node s1.js
+SUCCESS {"id":"smart-phone-synonyms","root":"smart phone","synonyms":["iphone","android"]}
+
+
+### S2  Python  synonyms.md  Upsert / Retrieve / Delete a synonym set item
+# synonyms.md lines 673-679 on this PR
+    synonymSetItem = {
+      "root": "smart phone",
+      "synonyms": ["iphone", "android"],
+    }
+    
+    # Creates/updates a synonym set called `tech-synonyms`
+    client.synonym_sets['tech-synonyms'].upsert_item('smart-phone-synonyms', synonymSetItem)
+# synonyms.md line 753 on this PR
+    client.synonym_sets['tech-synonyms'].get_item('smart-phone-synonyms')
+# synonyms.md line 882 on this PR
+    client.synonym_sets['tech-synonyms'].delete_item('smart-phone-synonyms')
+$ python s2.py
+-- upsert --
+SUCCESS
+-- retrieve --
+SUCCESS {'id': 'smart-phone-synonyms', 'root': 'smart phone', 'synonyms': ['iphone', 'android']}
+-- delete --
+SUCCESS {'id': 'smart-phone-synonyms'}
+
+
+### S3  Python  synonyms.md  List all synonym set items
+# synonyms.md line 819 on this PR
+    client.synonym_sets['tech-synonyms'].list_items()
+$ python s3.py
+SUCCESS [{'id': 'smart-phone-synonyms', 'root': 'smart phone', 'synonyms': ['iphone', 'android']}]
+
+
+### S4  Ruby  synonyms.md  Create or update a synonym set (Multi-way + One-way)
+# synonyms.md lines 103-113 on this PR
+    synonym_set = {
+      "items" => [
+        {
+          "id" => "coat-synonyms",
+          "synonyms" => ["blazer", "coat", "jacket"]
+        }
+      ]
+    }
+    
+    # Creates/updates a synonym set called `clothing-synonyms`
+    client.synonym_sets.upsert("clothing-synonyms", synonym_set)
+# synonyms.md lines 250-261 on this PR
+    synonym_set = {
+      "items" => [
+        {
+          "id" => "smart-phone-synonyms",
+          "root" => "smart phone",
+          "synonyms" => ["iphone", "android"]
+        }
+      ]
+    }
+    
+    # Creates/updates a synonym set called `tech-synonyms`
+    client.synonym_sets.upsert("tech-synonyms", synonym_set)
+[ruby:3.3] $ ruby s4.rb
+-- multi-way (clothing) --
+SUCCESS
+-- one-way (tech) --
+SUCCESS
+
+
+### S5  Ruby  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 687-688 on this PR
+    # typesense-ruby v5.0.0 has no synonym set item methods: add the item to the set and upsert the whole set.
+    client.synonym_sets.upsert('tech-synonyms', synonym_set)
+# synonyms.md lines 760-761 on this PR
+    # typesense-ruby v5.0.0 has no synonym set item methods: retrieve the whole set and read its items.
+    client.synonym_sets['tech-synonyms'].retrieve()
+# synonyms.md lines 826-827 on this PR
+    # typesense-ruby v5.0.0 has no synonym set item methods: retrieve the whole set and read its items.
+    client.synonym_sets['tech-synonyms'].retrieve()
+# synonyms.md line 889 on this PR
+    # typesense-ruby v5.0.0 has no synonym set item methods: upsert the set without the item instead.
+[ruby:3.3] $ ruby s5.rb
+-- upsert item --
+SUCCESS
+-- retrieve item --
+SUCCESS {"items"=>[{"id"=>"smart-phone-synonyms", "root"=>"smart phone", "synonyms"=>["iphone", "android"]}], "name"=>"tech-synonyms"}
+-- list items --
+SUCCESS {"items"=>[{"id"=>"smart-phone-synonyms", "root"=>"smart phone", "synonyms"=>["iphone", "android"]}], "name"=>"tech-synonyms"}
+-- delete item: note only, no code to run --
+
+# synonyms.md note (no runnable call) on this PR:
+    # typesense-ruby v5.0.0 has no synonym set item methods: upsert the set without the item instead.
+
+
+### S6  PHP  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 664-665 on this PR
+    # typesense-php v6.0.0 has no synonym set item methods: add the item to the set and upsert the whole set.
+    $client->synonymSets['tech-synonyms']->upsert($synonymSet);
+# synonyms.md lines 745-746 on this PR
+    # typesense-php v6.0.0 has no synonym set item methods: retrieve the whole set and read its items.
+    $client->synonymSets['tech-synonyms']->retrieve();
+# synonyms.md lines 811-812 on this PR
+    # typesense-php v6.0.0 has no synonym set item methods: retrieve the whole set and read its items.
+    $client->synonymSets['tech-synonyms']->retrieve();
+# synonyms.md line 875 on this PR
+    # typesense-php v6.0.0 has no synonym set item methods: upsert the set without the item instead.
+[php:8.4-cli] $ php s6.php
+-- upsert item --
+SUCCESS
+-- retrieve item --
+SUCCESS {"items":[{"id":"smart-phone-synonyms","root":"smart phone","synonyms":["iphone","android"]}],"name":"tech-synonyms"}
+-- list items --
+SUCCESS {"items":[{"id":"smart-phone-synonyms","root":"smart phone","synonyms":["iphone","android"]}],"name":"tech-synonyms"}
+-- delete item: note only, no code to run --
+
+# synonyms.md note (no runnable call) on this PR:
+    # typesense-php v6.0.0 has no synonym set item methods: upsert the set without the item instead.
+
+
+### S7  Java  synonyms.md  Create/Retrieve/Delete a synonym set (method name) + S8 Retrieve type + S9 List type
+# synonyms.md lines 120-128 on this PR
+    SynonymItemSchema synonymItem = new SynonymItemSchema();
+    synonymItem.setId("coat-synonyms");
+    synonymItem.addSynonymsItem("blazer").addSynonymsItem("coat").addSynonymsItem("jacket");
+    
+    SynonymSetCreateSchema synonymSet = new SynonymSetCreateSchema();
+    synonymSet.addItemsItem(synonymItem);
+    
+    // Creates/updates a synonym set called `clothing-synonyms`
+    client.synonymSet("clothing-synonyms").upsert(synonymSet);
+# synonyms.md lines 268-277 on this PR
+    SynonymItemSchema synonymItem = new SynonymItemSchema();
+    synonymItem.setId("smart-phone-synonyms");
+    synonymItem.addSynonymsItem("iphone").addSynonymsItem("android");
+    synonymItem.setRoot("smart phone");
+    
+    SynonymSetCreateSchema synonymSet = new SynonymSetCreateSchema();
+    synonymSet.addItemsItem(synonymItem);
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    client.synonymSet("tech-synonyms").upsert(synonymSet);
+# synonyms.md line 395 on this PR
+    SynonymSetCreateSchema synonymSet = client.synonymSet("clothing-synonyms").retrieve();
+## S9  Java  synonyms.md  List all synonym sets
+# synonyms.md line 477 on this PR
+    SynonymSetSchema[] synonymSets = client.synonymSets().retrieve();
+# synonyms.md line 561 on this PR
+    SynonymSetDeleteSchema result = client.synonymSet("clothing-synonyms").delete();
+[maven:3-eclipse-temurin-17] $ mvn -q -o compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+UPSERT(clothing) SUCCESS
+UPSERT(tech) SUCCESS
+RETRIEVE SUCCESS items=1
+LIST SUCCESS count=2
+DELETE SUCCESS name=clothing-synonyms
+
+
+### S10  Java  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 696-697 on this PR
+    // typesense-java v2.1.0 has no synonym set item methods: add the item to the set and upsert the whole set.
+    client.synonymSet("tech-synonyms").upsert(synonymSet);
+# synonyms.md lines 768-769 on this PR
+    // typesense-java v2.1.0 has no synonym set item methods: retrieve the whole set and read its items.
+    SynonymSetCreateSchema synonymSet = client.synonymSet("tech-synonyms").retrieve();
+# synonyms.md lines 834-835 on this PR
+    // typesense-java v2.1.0 has no synonym set item methods: retrieve the whole set and read its items.
+    SynonymSetCreateSchema synonymSet = client.synonymSet("tech-synonyms").retrieve();
+# synonyms.md line 896 on this PR
+    // typesense-java v2.1.0 has no synonym set item methods: upsert the set without the item instead.
+[maven:3-eclipse-temurin-17] $ mvn -q -o compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+UPSERT SUCCESS
+RETRIEVE SUCCESS items=1
+LIST SUCCESS items=1
+DELETE: note only, no code to run
+
+# synonyms.md note (no runnable call) on this PR:
+    // typesense-java v2.1.0 has no synonym set item methods: upsert the set without the item instead.
+
+
+### S11  Go  synonyms.md  Create/Retrieve/Delete a synonym set
+# synonyms.md lines 135-147 on this PR
+    // Synonym sets need typesense-go v4 (module github.com/typesense/typesense-go/v4).
+    // v3.2.0 has no synonym set API.
+    synonymItem := api.SynonymItemSchema{
+      Id:       "coat-synonyms",
+      Synonyms: []string{"blazer", "coat", "jacket"},
+    }
+    
+    synonymSet := &api.SynonymSetCreateSchema{
+      Items: []api.SynonymItemSchema{synonymItem},
+    }
+    
+    // Creates/updates a synonym set called `clothing-synonyms`
+    client.SynonymSet("clothing-synonyms").Upsert(context.Background(), synonymSet)
+# synonyms.md lines 284-297 on this PR
+    // Synonym sets need typesense-go v4 (module github.com/typesense/typesense-go/v4).
+    // v3.2.0 has no synonym set API.
+    synonymItem := api.SynonymItemSchema{
+      Id:       "smart-phone-synonyms",
+      Root:     pointer.String("smart phone"),
+      Synonyms: []string{"iphone", "android"},
+    }
+    
+    synonymSet := &api.SynonymSetCreateSchema{
+      Items: []api.SynonymItemSchema{synonymItem},
+    }
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    _, _ = client.SynonymSet("tech-synonyms").Upsert(context.Background(), synonymSet)
+# synonyms.md line 402 on this PR
+    client.SynonymSet("clothing-synonyms").Retrieve(context.Background())
+# synonyms.md line 568 on this PR
+    client.SynonymSet("clothing-synonyms").Delete(context.Background())
+$ go run main.go   # module v4
+UPSERT(clothing) err= <nil> items= 1
+UPSERT(tech) err= <nil> items= 1
+RETRIEVE err= <nil> items= 1
+DELETE err= status: 404 response: {"message":"Synonym index not found"}
+
+
+### S12  Go  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 705-706 on this PR
+    // typesense-go has no synonym set item methods (checked up to v4.0.0-alpha2): add the item to the set and upsert the whole set.
+    client.SynonymSet("tech-synonyms").Upsert(context.Background(), synonymSet)
+# synonyms.md lines 776-777 on this PR
+    // typesense-go has no synonym set item methods (checked up to v4.0.0-alpha2): retrieve the whole set and read its items.
+    synonymSet, err := client.SynonymSet("tech-synonyms").Retrieve(context.Background())
+# synonyms.md lines 842-843 on this PR
+    // typesense-go has no synonym set item methods (checked up to v4.0.0-alpha2): retrieve the whole set and read its items.
+    synonymSet, err := client.SynonymSet("tech-synonyms").Retrieve(context.Background())
+# synonyms.md line 903 on this PR
+    // typesense-go has no synonym set item methods (checked up to v4.0.0-alpha2): upsert the set without the item instead.
+$ go run main.go
+UPSERT err= <nil> items= 1
+RETRIEVE err= <nil> items= 1
+LIST err= <nil> items= 1
+DELETE: note only, no code to run
+
+# synonyms.md note (no runnable call) on this PR:
+    // typesense-go has no synonym set item methods (checked up to v4.0.0-alpha2): upsert the set without the item instead.

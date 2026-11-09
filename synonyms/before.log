@@ -1,0 +1,291 @@
+
+### S1  JavaScript  synonyms.md  Upsert a synonym set item
+# synonyms.md lines 645-652 on typesense-website master
+    synonymSetItem = {
+      root: 'smart phone',
+      synonyms: ['iphone', 'android'],
+    }
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    client.synonymSets('tech-synonyms').items('smart-phone-synonyms').upsert(synonymSetItem)
+    
+$ node s1.js
+ERROR TypeError client.synonymSets(...).items(...).upsert is not a function
+
+
+### S2  Python  synonyms.md  Upsert / Retrieve / Delete a synonym set item
+# synonyms.md lines 673-679 on typesense-website master
+    synonymSetItem = {
+      "root": "smart phone",
+      "synonyms": ["iphone", "android"],
+    }
+    
+    # Creates/updates a synonym set called `tech-synonyms`
+    client.synonym_sets['tech-synonyms'].items['smart-phone-synonyms'].upsert(synonymSetItem)
+# synonyms.md line 768 on typesense-website master
+    client.synonym_sets['tech-synonyms'].items['smart-phone-synonyms'].retrieve()
+# synonyms.md line 890 on typesense-website master
+    client.synonym_sets['tech-synonyms'].items['smart-phone-synonyms'].delete()
+$ python s2.py
+-- upsert --
+ERROR AttributeError 'SynonymSet' object has no attribute 'items'
+-- retrieve --
+ERROR AttributeError 'SynonymSet' object has no attribute 'items'
+-- delete --
+ERROR AttributeError 'SynonymSet' object has no attribute 'items'
+
+
+### S3  Python  synonyms.md  List all synonym set items
+# synonyms.md line 830 on typesense-website master
+    client.synonym_sets['tech-synonyms'].items().retrieve()
+$ python s3.py
+ERROR AttributeError 'SynonymSet' object has no attribute 'items'
+
+
+### S4  Ruby  synonyms.md  Create or update a synonym set (Multi-way + One-way)
+# synonyms.md lines 103-113 on typesense-website master
+    synonym_set = {
+      "items" => [
+        {
+          "id" => "coat-synonyms",
+          "synonyms" => ["blazer", "coat", "jacket"]
+        }
+      ]
+    }
+    
+    # Creates/updates a synonym set called `clothing-synonyms`
+    client.synonym_sets["clothing-synonyms"].upsert(synonym_set)
+# synonyms.md lines 248-259 on typesense-website master
+    synonym_set = {
+      "items" => [
+        {
+          "id" => "smart-phone-synonyms",
+          "root" => "smart phone",
+          "synonyms" => ["iphone", "android"]
+        }
+      ]
+    }
+    
+    # Creates/updates a synonym set called `tech-synonyms`
+    client.synonym_sets["tech-synonyms"].upsert(synonym_set)
+[ruby:3.3] $ ruby s4.rb
+-- multi-way (clothing) --
+ERROR NoMethodError undefined method `upsert' for an instance of Typesense::SynonymSet
+-- one-way (tech) --
+ERROR NoMethodError undefined method `upsert' for an instance of Typesense::SynonymSet
+
+
+### S5  Ruby  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 687-693 on typesense-website master
+    synonymSetItem = {
+      "root" => "smart phone",
+      "synonyms" => ["iphone", "android"],
+    }
+    
+    # Creates/updates a synonym set called `tech-synonyms`
+    client.synonym_sets['tech-synonyms'].items['smart-phone-synonyms'].upsert(synonymSetItem)
+# synonyms.md line 775 on typesense-website master
+    client.synonym_sets['tech-synonyms'].items['smart-phone-synonyms'].retrieve()
+# synonyms.md line 837 on typesense-website master
+    client.synonym_sets['tech-synonyms'].items().retrieve()
+# synonyms.md line 897 on typesense-website master
+    client.synonym_sets['tech-synonyms'].items['smart-phone-synonyms'].delete()
+[ruby:3.3] $ ruby s5.rb
+-- upsert item --
+ERROR NoMethodError undefined method `items' for an instance of Typesense::SynonymSet
+-- retrieve item --
+ERROR NoMethodError undefined method `items' for an instance of Typesense::SynonymSet
+-- list items --
+ERROR NoMethodError undefined method `items' for an instance of Typesense::SynonymSet
+-- delete item --
+ERROR NoMethodError undefined method `items' for an instance of Typesense::SynonymSet
+
+
+### S6  PHP  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 660-665 on typesense-website master
+    $synonymSetItem = [
+      'root' => 'smart phone',
+      'synonyms' => ['iphone', 'android'],
+    ];
+    
+    $client->synonymSets['tech-synonyms']->items['smart-phone-synonyms']->upsert($synonymSetItem);
+# synonyms.md line 761 on typesense-website master
+    $client->synonymSets['tech-synonyms']->items['smart-phone-synonyms']->retrieve();
+# synonyms.md line 823 on typesense-website master
+    $client->synonymSets['tech-synonyms']->items->retrieve();
+# synonyms.md line 883 on typesense-website master
+    $client->synonymSets['tech-synonyms']->items['smart-phone-synonyms']->delete();
+[php:8.4-cli] $ php s6.php
+-- upsert item --
+
+Warning: Undefined property: Typesense\SynonymSet::$items in /w/s6.php on line 13
+
+Warning: Trying to access array offset on null in /w/s6.php on line 13
+ERROR Error: Call to a member function upsert() on null
+-- retrieve item --
+
+Warning: Undefined property: Typesense\SynonymSet::$items in /w/s6.php on line 18
+
+Warning: Trying to access array offset on null in /w/s6.php on line 18
+ERROR Error: Call to a member function retrieve() on null
+-- list items --
+
+Warning: Undefined property: Typesense\SynonymSet::$items in /w/s6.php on line 23
+ERROR Error: Call to a member function retrieve() on null
+-- delete item --
+
+Warning: Undefined property: Typesense\SynonymSet::$items in /w/s6.php on line 28
+
+Warning: Trying to access array offset on null in /w/s6.php on line 28
+ERROR Error: Call to a member function delete() on null
+
+
+### S7  Java  synonyms.md  Create/Retrieve/Delete a synonym set (method name) + S8 Retrieve type + S9 List type
+# synonyms.md lines 120-128 on typesense-website master
+    SynonymItemSchema synonymItem = new SynonymItemSchema();
+    synonymItem.setId("coat-synonyms");
+    synonymItem.addSynonymsItem("blazer").addSynonymsItem("coat").addSynonymsItem("jacket");
+    
+    SynonymSetCreateSchema synonymSet = new SynonymSetCreateSchema();
+    synonymSet.addItemsItem(synonymItem);
+    
+    // Creates/updates a synonym set called `clothing-synonyms`
+    client.synonymSets("clothing-synonyms").upsert(synonymSet);
+# synonyms.md lines 266-275 on typesense-website master
+    SynonymItemSchema synonymItem = new SynonymItemSchema();
+    synonymItem.setId("smart-phone-synonyms");
+    synonymItem.addSynonymsItem("iphone").addSynonymsItem("android");
+    synonymItem.setRoot("smart phone");
+    
+    SynonymSetCreateSchema synonymSet = new SynonymSetCreateSchema();
+    synonymSet.addItemsItem(synonymItem);
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    client.synonymSets("tech-synonyms").upsert(synonymSet);
+# synonyms.md line 391 on typesense-website master
+    SynonymSet synonymSet = client.synonymSets("clothing-synonyms").retrieve();
+## S9  Java  synonyms.md  List all synonym sets
+# synonyms.md line 473 on typesense-website master
+    List<SynonymSetSchema> synonymSets = client.synonymSets().retrieve();
+# synonyms.md line 557 on typesense-website master
+    SynonymSetDeleteSchema result = client.synonymSets("clothing-synonyms").delete();
+[maven:3-eclipse-temurin-17] $ mvn -q -o compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+[ERROR] /w/src/main/java/Main.java:[17,7] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+  required: no arguments
+  found:    java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /w/src/main/java/Main.java:[29,7] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+[ERROR] /w/src/main/java/Main.java:[32,5] cannot find symbol
+  symbol:   class SynonymSet
+  location: class Main
+[ERROR] /w/src/main/java/Main.java:[32,35] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+[ERROR] /w/src/main/java/Main.java:[35,71] incompatible types: org.typesense.model.SynonymSetSchema[] cannot be converted to java.util.List<org.typesense.model.SynonymSetSchema>
+[ERROR] /w/src/main/java/Main.java:[36,59] cannot find symbol
+  symbol:   variable length
+  location: variable synonymSets of type java.util.List<org.typesense.model.SynonymSetSchema>
+[ERROR] /w/src/main/java/Main.java:[38,43] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project s7test: Compilation failure: Compilation failure: 
+[ERROR]   required: no arguments
+[ERROR]   found:    java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR]   symbol:   class SynonymSet
+[ERROR]   location: class Main
+[ERROR]   symbol:   variable length
+[ERROR]   location: variable synonymSets of type java.util.List<org.typesense.model.SynonymSetSchema>
+
+
+### S10  Java  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 701-706 on typesense-website master
+    SynonymItemSchema synonymSetItem = new SynonymItemSchema();
+    synonymSetItem.setId("smart-phone-synonyms");
+    synonymSetItem.addSynonymsItem("iphone").addSynonymsItem("android");
+    synonymSetItem.setRoot("smart phone");
+    
+    client.synonymSets("tech-synonyms").items("smart-phone-synonyms").upsert(synonymSetItem);
+# synonyms.md line 782 on typesense-website master
+    SynonymItemSchema synonymItem = client.synonymSets("tech-synonyms").items("smart-phone-synonyms").retrieve();
+# synonyms.md line 844 on typesense-website master
+    SynonymItemSchema synonymItem = client.synonymSets("tech-synonyms").items().retrieve();
+# synonyms.md line 904 on typesense-website master
+    client.synonymSets("tech-synonyms").items("smart-phone-synonyms").delete();
+[maven:3-eclipse-temurin-17] $ mvn -q -o compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+[ERROR] /w/src/main/java/Main.java:[16,7] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+  required: no arguments
+  found:    java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /w/src/main/java/Main.java:[19,43] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+[ERROR] /w/src/main/java/Main.java:[22,43] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+[ERROR] /w/src/main/java/Main.java:[25,11] method synonymSets in class org.typesense.api.Client cannot be applied to given types;
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project s7test: Compilation failure: Compilation failure: 
+[ERROR]   required: no arguments
+[ERROR]   found:    java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+
+
+### S11  Go  synonyms.md  Create/Retrieve/Delete a synonym set
+# synonyms.md lines 135-145 on typesense-website master
+    synonymItem := &api.SynonymItemSchema{
+      ID:       "coat-synonyms",
+      Synonyms: []string{"blazer", "coat", "jacket"},
+    }
+    
+    synonymSet := &api.SynonymSetCreateSchema{
+      Items: []*api.SynonymItemSchema{synonymItem},
+    }
+    
+    // Creates/updates a synonym set called `clothing-synonyms`
+    client.SynonymSets("clothing-synonyms").Upsert(context.Background(), synonymSet)
+# synonyms.md lines 282-293 on typesense-website master
+    synonymItem := &api.SynonymItemSchema{
+      ID:       "smart-phone-synonyms",
+      Root:     pointer.String("smart phone"),
+      Synonyms: []string{"iphone", "android"},
+    }
+    
+    synonymSet := &api.SynonymSetCreateSchema{
+      Items: []*api.SynonymItemSchema{synonymItem},
+    }
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    _, _ = client.SynonymSets("tech-synonyms").Upsert(context.Background(), synonymSet)
+# synonyms.md line 398 on typesense-website master
+    client.SynonymSets("clothing-synonyms").Retrieve(context.Background())
+# synonyms.md line 564 on typesense-website master
+    client.SynonymSets("clothing-synonyms").Delete(context.Background())
+$ go run main.go   # module v3
+.\main.go:22:8: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:25:22: undefined: api.SynonymItemSchema
+.\main.go:31:20: undefined: api.SynonymSetCreateSchema
+.\main.go:32:17: undefined: api.SynonymItemSchema
+.\main.go:36:15: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:39:9: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:42:9: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:42:9: too many errors
+
+
+### S12  Go  synonyms.md  Upsert / Retrieve / List / Delete a synonym set item
+# synonyms.md lines 714-722 on typesense-website master
+    synonymItem := &api.SynonymItemSchema{
+      ID:       "smart-phone-synonyms",
+      Root:     pointer.String("smart phone"),
+      Synonyms: []string{"iphone", "android"},
+    }
+    
+    // Creates/updates a synonym set called `tech-synonyms`
+    client.SynonymSets("tech-synonyms").Items("smart-phone-synonyms").Upsert(context.Background(), synonymItem)
+    
+# synonyms.md line 789 on typesense-website master
+    synonymItem, err := client.SynonymSets("tech-synonyms").Items("smart-phone-synonyms").Retrieve(context.Background())
+# synonyms.md line 851 on typesense-website master
+    synonymItem, err := client.SynonymSets("tech-synonyms").Items().Retrieve(context.Background())
+# synonyms.md line 911 on typesense-website master
+    client.SynonymSets("tech-synonyms").Items("smart-phone-synonyms").Delete(context.Background())
+$ go run main.go
+# command-line-arguments
+.\main.go:11:21: undefined: api.SynonymSetCreateSchema
+.\main.go:11:57: undefined: api.SynonymItemSchema
+.\main.go:13:22: undefined: api.SynonymItemSchema
+.\main.go:20:8: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:23:29: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:26:29: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
+.\main.go:29:9: client.SynonymSets undefined (type *typesense.Client has no field or method SynonymSets)
