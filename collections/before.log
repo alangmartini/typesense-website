@@ -1,0 +1,104 @@
+
+### K1  Java  collections.md  Create a collection / With pre-defined schema
+# collections.md lines 205-212 on typesense-website master
+    CollectionSchema collectionSchema = new CollectionSchema();
+    
+    collectionschema.name("companies")
+                    .addFieldsItem(new Field().name("company_name").type(FieldTypes.STRING))
+                    .addFieldsItem(new Field().name("num_employees").type(FieldTypes.INT32))
+                    .addFieldsItem(new Field().name("country").type(FieldTypes.STRING).facet(true));
+    
+    CollectionResponse collectionResponse = client.collections().create(collectionSchema);
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+[ERROR] /w/src/main/java/Main.java:[11,1] cannot find symbol
+  symbol:   variable collectionschema
+  location: class Main
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project collectionstest: Compilation failure
+[ERROR]   symbol:   variable collectionschema
+[ERROR]   location: class Main
+
+### K2  Swift  collections.md  List all collections
+# collections.md line 849 on typesense-website master
+    let (collections, response) = try await client.collections().retrieveAll()
+[swift:5.10] $ rm -f .build/debug/K; swift build 2>&1 | tail -n 6; test -f .build/debug/K && .build/debug/K
+[4/7] Compiling K main.swift
+/w/Sources/K/main.swift:5:48: error: cannot call value of non-function type 'Collections'
+let (collections, response) = try await client.collections().retrieveAll()
+                                               ^          ~~
+                                                          
+error: fatalError
+
+### K5  Python  collections.md  Truncate a collection
+# collections.md line 1027 on typesense-website master
+    client.collections['companies'].documents.delete({'truncate': true})
+$ cd "/c/tmp/docs302-verify/evidence/collections/py" && { source venv/Scripts/activate 2>/dev/null || source venv/bin/activate; } && python truncate_py.py
+Traceback (most recent call last):
+  File "C:\tmp\docs302-verify\evidence\collections\py\truncate_py.py", line 8, in <module>
+    client.collections['companies'].documents.delete({'truncate': true})
+                                                                  ^^^^
+NameError: name 'true' is not defined. Did you mean: 'True'?
+
+### K6  Dart  collections.md  Truncate a collection
+# collections.md line 1041 on typesense-website master
+    await client.collection('companies').documents.delete({'truncate': true});
+[dart:stable] $ dart pub get >/dev/null 2>&1 && dart run main.dart
+main.dart:12:68: Error: A value of type 'bool' can't be assigned to a variable of type 'String'.
+await client.collection('companies').documents.delete({'truncate': true});
+                                                                   ^
+
+### K7  Java/Swift  collections.md  Truncate a collection
+# collections.md line 1048 on typesense-website master
+    CollectionResponse response = client.collections("companies").documents().delete(new DeleteDocumentsParameters().truncate(true));
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim
+[ERROR] /w/src/main/java/Main.java:[9,81] incompatible types: java.util.Map<java.lang.String,java.lang.Object> cannot be converted to org.typesense.model.CollectionResponse
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project collectionstest: Compilation failure
+# collections.md line 1055 on typesense-website master
+    let (response, httpResponse) = try await client.collection(name: "companies").documents().delete(parameters: DeleteDocumentsParams(truncate: true))
+[swift:5.10] $ rm -f .build/debug/K; swift build 2>&1 | tail -n 6; test -f .build/debug/K && .build/debug/K
+                                                                                                             ^~~~~~~~~~~~~~~~~~~~~
+/w/Sources/K/main.swift:5:97: error: incorrect argument label in call (have 'parameters:', expected 'options:')
+let (response, httpResponse) = try await client.collection(name: "companies").documents().delete(parameters: DeleteDocumentsParams(truncate: true))
+                                                                                                ^~~~~~~~~~~
+                                                                                                 options
+error: fatalError
+
+### K4  Dart  collections.md  Update or alter a collection
+# collections.md lines 1175-1181 on typesense-website master
+    final updateSchema = UpdateSchema(
+      {
+        Field('num_employees', drop: true),
+        Field('company_category', Type.string)
+      }
+    );
+    await client.collection('companies').update(updateSchema);
+[dart:stable] $ dart pub get >/dev/null 2>&1 && dart run main.dart
+main.dart:14:28: Error: No named parameter with the name 'drop'.
+    Field('num_employees', drop: true),
+                           ^^^^
+/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/models/field.dart:84:3: Context: Found this candidate, but the arguments don't match.
+  Field(
+  ^^^^^
+main.dart:15:10: Error: Too many positional arguments: 1 allowed, but 2 found.
+Try removing the extra positional arguments.
+    Field('company_category', Type.string)
+         ^
+/root/.pub-cache/hosted/pub.dev/typesense-0.6.0/lib/src/models/field.dart:84:3: Context: Found this candidate, but the arguments don't match.
+  Field(
+  ^^^^^
+
+### K3  Swift  collections.md  Update or alter a collection
+# collections.md lines 1212-1218 on typesense-website master
+    let updateSchema = CollectionUpdateSchema(
+      fields: [
+        Field(name: "num_employees", drop: true),
+        Field(name: "company_category", type: "string")
+      ]
+    )
+    try await client.collections.update(updateSchema: updateSchema)
+[swift:5.10] $ rm -f .build/debug/K; swift build 2>&1 | tail -n 6; test -f .build/debug/K && .build/debug/K
+    public init(name: String, type: String, _optional: Bool? = nil, facet: Bool? = nil, index: Bool? = nil, locale: String? = nil, sort: Bool? = nil, _infix: Bool? = nil, reference: String? = nil, numDim: Int? = nil, drop: Bool? = nil, store: Bool? = nil, embed: FieldEmbed? = nil) {
+           ^
+/w/Sources/K/main.swift:11:30: error: value of type 'Collections' has no member 'update'
+try await client.collections.update(updateSchema: updateSchema)
+          ~~~~~~~~~~~~~~~~~~ ^~~~~~
+error: fatalError
