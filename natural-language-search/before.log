@@ -1,0 +1,17 @@
+
+### NL1  Shell  natural-language-search.md  Schema Prompt Cache
+# natural-language-search.md lines 573-578 on typesense-website master
+    curl "http://localhost:8108/collections/products/documents/search" \
+    -H "X-TYPESENSE-API-KEY: ${API_KEY}" \
+    --data-urlencode "q=red shirts" \
+    --data-urlencode "nl_query=true" \
+    --data-urlencode "query_by=name,description,color,category" \
+    --data-urlencode "nl_query_prompt_cache_ttl=60"
+$ curl -s -w "\nHTTP %{http_code}\n" "http://localhost:18111/collections/products/documents/search" \
+-H "X-TYPESENSE-API-KEY: ${API_KEY}" \
+--data-urlencode "q=red shirts" \
+--data-urlencode "nl_query=true" \
+--data-urlencode "query_by=name,description,color,category" \
+--data-urlencode "nl_query_prompt_cache_ttl=60"
+{"message":"Not Found"}
+HTTP 404
