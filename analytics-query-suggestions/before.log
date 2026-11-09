@@ -1,0 +1,119 @@
+
+### A3  Go  analytics-query-suggestions.md  Create a single rule
+# analytics-query-suggestions.md lines 109-123 on typesense-website master
+    ```go
+    rule := map[string]interface{}{
+      "name":       "homepage_popular_queries",
+      "type":       "popular_queries",
+      "collection": "products",
+      "event_type": "search",
+      "rule_tag":   "homepage",
+      "params": map[string]interface{}{
+        "destination_collection":  "product_queries",
+        "limit":                   100,
+        "capture_search_requests": true,
+      },
+    }
+    
+    _, err := client.Analytics().Rules().Create(context.Background(), rule)
+$ go run -C '/c/tmp/docs302-verify/evidence/analytics-query-suggestions/go-before' . 2>&1 | head -n 6
+# a3orig
+.\main.go:25:38: client.Analytics().Rules().Create undefined (type typesense.AnalyticsRulesInterface has no field or method Create)
+
+### A1  Python  analytics-query-suggestions.md  Create a destination collection (Query Suggestions)
+# analytics-query-suggestions.md lines 394-402 on typesense-website master
+    let schema = {
+      "name": "product_queries",
+      "fields": [
+        {"name": "q", "type": "string" },
+        {"name": "count", "type": "int32" }
+      ]
+    }
+    
+    client.collections.create(schema)
+$ '/c/tmp/docs302-verify/evidence/analytics-query-suggestions/py/venv/Scripts/python.exe' '/c/tmp/docs302-verify/evidence/analytics-query-suggestions/py/a1_before.py' 2>&1 | tail -n 5
+  File "C:\tmp\docs302-verify\evidence\analytics-query-suggestions\py\a1_before.py", line 3
+    let schema = {
+        ^^^^^^
+SyntaxError: invalid syntax
+
+### A2  Ruby  analytics-query-suggestions.md  Change the parameters of a rule (update)
+# analytics-query-suggestions.md lines 457-471 on typesense-website master
+    rule_name = 'product_queries_aggregation'
+    rule_configuration = {
+      'name' => rule_name,
+      'type' => 'popular_queries',
+      'collection' => 'products',
+      'event_type' => 'search',
+      'params' => {
+        'destination_collection' => 'product_queries',
+        'expand_query' => false,
+        'limit' => 1000,
+        'capture_search_requests' => true
+      }
+    }
+    
+    typesense.analytics.rules.upsert(rule_name, rule_configuration)
+[ruby:3.3] $ gem install typesense -v 5.0.0 --no-document >/dev/null 2>&1 && ruby a2_before.rb 2>&1 | tail -n 6
+a2_before.rb:17:in `<main>': undefined method `upsert' for an instance of Typesense::AnalyticsRules (NoMethodError)
+
+typesense.analytics.rules.upsert(rule_name, rule_configuration)
+                         ^^^^^^^
+
+### A4  Shell  analytics-query-suggestions.md  Sending click events
+# analytics-query-suggestions.md lines 1414-1423 on typesense-website master
+    curl "http://localhost:8108/analytics/events" -X POST \
+         -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+         -d '{
+                "event_type": "click",
+                "name": "products_click_event",
+                "data": {
+                      "doc_id": "1024",
+                      "user_id": "111112"
+                }
+            }'
+$ curl -s "http://localhost:18111/analytics/events" -X POST \
+     -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+     -d '{
+            "event_type": "click",
+            "name": "products_click_event",
+            "data": {
+                  "doc_id": "1024",
+                  "user_id": "111112"
+            }
+        }'
+{"message":"Rule not found"}
+### A7  Ruby  analytics-query-suggestions.md  Retrieve rules (filter by rule_tag)
+# analytics-query-suggestions.md lines 1984-1988 on typesense-website master
+    # Retrieve all rules
+    typesense.analytics.rules.retrieve
+    
+    # Optionally filter by rule_tag
+    typesense.analytics.rules.retrieve(rule_tag: 'homepage')
+[ruby:3.3] $ gem install typesense -v 5.0.0 --no-document >/dev/null 2>&1 && ruby a7_before.rb 2>&1 | tail -n 6
+/usr/local/bundle/gems/typesense-5.0.0/lib/typesense/analytics_rules.rb:15:in `retrieve': wrong number of arguments (given 1, expected 0) (ArgumentError)
+	from a7_before.rb:7:in `<main>'
+
+### A5  Python  analytics-query-suggestions.md  Delete a rule
+# analytics-query-suggestions.md line 2071 on typesense-website master
+    client.analytics.rules('product_queries_aggregation').delete()
+$ '/c/tmp/docs302-verify/evidence/analytics-query-suggestions/py/venv/Scripts/python.exe' '/c/tmp/docs302-verify/evidence/analytics-query-suggestions/py/a5_before.py' 2>&1 | tail -n 5
+Traceback (most recent call last):
+  File "C:\tmp\docs302-verify\evidence\analytics-query-suggestions\py\a5_before.py", line 3, in <module>
+    print(client.analytics.rules('product_queries_aggregation').delete())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'AnalyticsRules' object is not callable
+
+### A6  Shell  analytics-query-suggestions.md  Delete a rule
+# analytics-query-suggestions.md lines 2079-2082 on typesense-website master
+    curl -k "http://localhost:8108/analytics/rules/product_queries_aggregation"
+          -X DELETE \
+          -H "Content-Type: application/json" \
+          -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}"
+$ curl -k -s "http://localhost:18111/analytics/rules/product_queries_aggregation"
+      -X DELETE \
+      -H "Content-Type: application/json" \
+      -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}"
+{"message": "Forbidden - a valid `x-typesense-api-key` header must be sent."}sh: line 2: -X: command not found
+$ curl -s "http://localhost:18111/analytics/rules/product_queries_aggregation" -H "X-TYPESENSE-API-KEY: xyz"
+{"collection":"products","event_type":"search","name":"product_queries_aggregation","params":{"capture_search_requests":false,"destination_collection":"product_queries","expand_query":false,"limit":1000},"rule_tag":"","type":"popular_queries"}
