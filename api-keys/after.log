@@ -1,0 +1,9 @@
+
+### AK1  Java  api-keys.md  Retrieve an API key / Delete API key
+# api-keys.md line 558 on this PR
+    ApiKey apiKey = client.keys(1L).retrieve();
+# api-keys.md line 769 on this PR
+    ApiKey apiKey = client.keys(1L).delete();
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+retrieve -> id=1, description=k1
+delete -> id=1

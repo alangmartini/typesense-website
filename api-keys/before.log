@@ -1,0 +1,10 @@
+
+### AK1  Java  api-keys.md  Retrieve an API key / Delete API key
+# api-keys.md line 558 on typesense-website master
+    ApiKey apiKey = client.keys(1).retrieve();
+# api-keys.md line 769 on typesense-website master
+    ApiKey apiKey = client.keys(1).delete();
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | /trim  # trim drops maven boilerplate and repeated lines
+[ERROR] /w/src/main/java/Main.java:[11,29] incompatible types: int cannot be converted to java.lang.Long
+[ERROR] /w/src/main/java/Main.java:[14,29] incompatible types: int cannot be converted to java.lang.Long
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project ak1: Compilation failure: Compilation failure: 
