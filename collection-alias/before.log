@@ -1,0 +1,74 @@
+
+### AL1  Shell  collection-alias.md  Use Case (multi_search through the alias)
+# collection-alias.md lines 28-39 on typesense-website master
+    curl "http://localhost:8108/multi_search" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+            -d '{
+              "searches": [
+                {
+                  "collection": "companies",
+                  "q": "Acme"
+                }
+              ]
+            }'
+$ curl -s "http://localhost:18114/multi_search" \
+        -X POST \
+        -H "Content-Type: application/json" \
+        -H "X-TYPESENSE-API-KEY: xyz" \
+        -d '{
+          "searches": [
+            {
+              "collection": "companies",
+              "q": "Acme"
+            }
+          ]
+        }' | grep -o '"found":[0-9]*\|"code":[0-9]*\|"error":"[^"]*"'  # -s silences curl's progress meter; grep -o keeps just the result code/count from the one-line JSON reply
+"code":400
+"error":"No search fields specified for the query."
+
+### AL3  PHP  collection-alias.md  Create or Update an alias
+# collection-alias.md lines 73-78 on typesense-website master
+    $aliasedCollection = [
+      'collection_name' => 'companies_june11'
+    ]
+    
+    # Creates/updates an alias called `companies` to the `companies_june11` collection
+    $client->aliases->upsert('companies', $aliasedCollection)
+[php:8.3-cli] $ php run.php
+
+Parse error: syntax error, unexpected variable "$client" in /w/run.php on line 22
+
+### AL2  Dart  collection-alias.md  Create or Update an alias
+# collection-alias.md lines 109-114 on typesense-website master
+    final aliasedCollection = {
+      'collection_name': 'companies_june11'
+    };
+    
+    // Creates/updates an alias called `companies` to the `companies_june11` collection
+    await client.aliases.upsert('companies', aliased_collection);
+[dart:stable] $ dart pub get >/dev/null 2>&1 && dart run main.dart
+main.dart:22:42: Error: Undefined name 'aliased_collection'.
+await client.aliases.upsert('companies', aliased_collection);
+                                         ^^^^^^^^^^^^^^^^^^
+
+### AL4  Java  collection-alias.md  Retrieve an alias / Delete an alias
+# collection-alias.md line 229 on typesense-website master
+    CollectionAliasSchema collectionAlias = client.aliases("companies").retrieve();
+# collection-alias.md line 415 on typesense-website master
+    CollectionAliasSchema collectionAlias = client.aliases("companies").delete();
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | grep -v "^SLF4J\|^\[ERROR\] \(Re-run\|To see\|For more\|-> \|\[Help\|COMPILATION ERROR\)\|^\[ERROR\] *$"
+[ERROR] /w/src/main/java/Main.java:[10,77] incompatible types: org.typesense.model.CollectionAlias cannot be converted to org.typesense.model.CollectionAliasSchema
+[ERROR] /w/src/main/java/Main.java:[14,75] incompatible types: org.typesense.model.CollectionAlias cannot be converted to org.typesense.model.CollectionAliasSchema
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.16.0:compile (default-compile) on project collectionaliastest: Compilation failure: Compilation failure: 
+[ERROR] /w/src/main/java/Main.java:[10,77] incompatible types: org.typesense.model.CollectionAlias cannot be converted to org.typesense.model.CollectionAliasSchema
+[ERROR] /w/src/main/java/Main.java:[14,75] incompatible types: org.typesense.model.CollectionAlias cannot be converted to org.typesense.model.CollectionAliasSchema
+
+### AL5  Shell  collection-alias.md  Delete an alias
+# collection-alias.md lines 436-437 on typesense-website master
+    curl "http://localhost:8108/aliases/companies" -X DELETE
+        -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}"
+$ curl -s "http://localhost:18114/aliases/companies" -X DELETE
+    -H "X-TYPESENSE-API-KEY: xyz"  # -s on the first curl call only; silences its progress meter, the "-H: command not found" line below is the real bug
+{"message": "Forbidden - a valid `x-typesense-api-key` header must be sent."}sh: line 2: -H: command not found

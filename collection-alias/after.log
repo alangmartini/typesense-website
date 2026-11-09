@@ -1,0 +1,75 @@
+
+### AL1  Shell  collection-alias.md  Use Case (multi_search through the alias)
+# collection-alias.md lines 28-40 on this PR
+    curl "http://localhost:8108/multi_search" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+            -d '{
+              "searches": [
+                {
+                  "collection": "companies",
+                  "q": "Acme",
+                  "query_by": "company_name"
+                }
+              ]
+            }'
+$ curl -s "http://localhost:18114/multi_search" \
+        -X POST \
+        -H "Content-Type: application/json" \
+        -H "X-TYPESENSE-API-KEY: xyz" \
+        -d '{
+          "searches": [
+            {
+              "collection": "companies",
+              "q": "Acme",
+              "query_by": "company_name"
+            }
+          ]
+        }' | grep -o '"found":[0-9]*\|"code":[0-9]*\|"error":"[^"]*"'  # -s silences curl's progress meter; grep -o keeps just the result code/count from the one-line JSON reply
+"found":1
+
+### AL3  PHP  collection-alias.md  Create or Update an alias
+# collection-alias.md lines 74-79 on this PR
+    $aliasedCollection = [
+      'collection_name' => 'companies_june11'
+    ];
+    
+    # Creates/updates an alias called `companies` to the `companies_june11` collection
+    $client->aliases->upsert('companies', $aliasedCollection);
+[php:8.3-cli] $ php run.php
+upsert -> {"collection_name":"companies_june11","name":"companies"}
+
+### AL2  Dart  collection-alias.md  Create or Update an alias
+# collection-alias.md lines 110-115 on this PR
+    final aliasedCollection = {
+      'collection_name': 'companies_june11'
+    };
+    
+    // Creates/updates an alias called `companies` to the `companies_june11` collection
+    await client.aliases.upsert('companies', aliasedCollection);
+[dart:stable] $ dart pub get >/dev/null 2>&1 && dart run main.dart
+upsert -> {collection_name: companies_june11, name: companies}
+
+### AL4  Java  collection-alias.md  Retrieve an alias / Delete an alias
+# collection-alias.md line 230 on this PR
+    CollectionAlias collectionAlias = client.aliases("companies").retrieve();
+# collection-alias.md line 416 on this PR
+    CollectionAlias collectionAlias = client.aliases("companies").delete();
+[maven:3-eclipse-temurin-17] $ mvn -q compile exec:java -Dexec.mainClass=Main 2>&1 | grep -v "^SLF4J\|^\[ERROR\] \(Re-run\|To see\|For more\|-> \|\[Help\|COMPILATION ERROR\)\|^\[ERROR\] *$"
+retrieve -> class CollectionAlias {
+    name: companies
+    collectionName: companies_june10
+}
+delete -> class CollectionAlias {
+    name: companies
+    collectionName: companies_june10
+}
+
+### AL5  Shell  collection-alias.md  Delete an alias
+# collection-alias.md lines 437-438 on this PR
+    curl "http://localhost:8108/aliases/companies" -X DELETE \
+        -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}"
+$ curl -s "http://localhost:18114/aliases/companies" -X DELETE \
+    -H "X-TYPESENSE-API-KEY: xyz"  # -s on the first curl call only; silences its progress meter, the "-H: command not found" line below is the real bug
+{"collection_name":"companies_june10","name":"companies"}
