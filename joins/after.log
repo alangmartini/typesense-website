@@ -1,0 +1,18 @@
+
+### J1  Shell  joins.md  Fetch referenced fields via multi_search
+# joins.md lines 36-47 on this PR
+    curl "http://localhost:8108/multi_search" -X POST \
+            -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+            -d '{
+                  "searches": [
+                    {
+                      "collection": "books",
+                      "include_fields": "$authors(first_name,last_name)",
+                      "q": "famous",
+                      "query_by": "title"
+                    }
+                  ]
+                }'
+$ HOME="/c/tmp/docs302-verify/evidence/joins" TYPESENSE_API_KEY=xyz sh "/c/tmp/docs302-verify/evidence/joins/j1.sh" 2>&1 | grep -oE '"error":"[^"]*"|"found":[0-9]*|"authors":\{[^}]*\}'
+"found":1
+"authors":{"first_name":"Victor","last_name":"Hugo"}
